@@ -17,133 +17,182 @@ package Triangle.SyntacticAnalyzer;
 
 final class Token extends Object {
 
-  protected int kind;
-  protected String spelling;
-  protected SourcePosition position;
+    protected int kind;
+    protected String spelling;
+    protected SourcePosition position;
 
-  public Token(int kind, String spelling, SourcePosition position) {
+    public Token(int kind, String spelling, SourcePosition position) {
 
-    if (kind == Token.IDENTIFIER) {
-      int currentKind = firstReservedWord;
-      boolean searching = true;
+        if (kind == Token.IDENTIFIER) {
+            int currentKind = firstReservedWord;
+            boolean searching = true;
 
-      while (searching) {
-        int comparison = tokenTable[currentKind].compareTo(spelling);
-        if (comparison == 0) {
-          this.kind = currentKind;
-          searching = false;
-        } else if (comparison > 0 || currentKind == lastReservedWord) {
-          this.kind = Token.IDENTIFIER;
-          searching = false;
-        } else {
-          currentKind ++;
-        }
-      }
-    } else
-      this.kind = kind;
+            while (searching) {
+                int comparison = tokenTable[currentKind].compareTo(spelling);
+                if (comparison == 0) {
+                    this.kind = currentKind;
+                    searching = false;
+                } else if (comparison > 0 || currentKind == lastReservedWord) {
+                    this.kind = Token.IDENTIFIER;
+                    searching = false;
+                } else {
+                    currentKind++;
+                }
+            }
+        } else
+            this.kind = kind;
 
-    this.spelling = spelling;
-    this.position = position;
+        this.spelling = spelling;
+        this.position = position;
 
-  }
+    }
 
-  public static String spell (int kind) {
-    return tokenTable[kind];
-  }
+    public static String spell(int kind) {
+        return tokenTable[kind];
+    }
 
-  public String toString() {
-    return "Kind=" + kind + ", spelling=" + spelling +
-      ", position=" + position;
-  }
+    public String toString() {
+        return "Kind=" + kind + ", spelling=" + spelling +
+                ", position=" + position;
+    }
 
-  // Token classes...
-
-  public static final int
-
+    // Token classes...
+        /*
+      CAMBIOS NUEVOS:
+      -Eliminación de BEGIN
+      -Adición de las palabras reservadas:
+        +for
+        +from
+        +init
+        +leave
+        +local
+        +loop
+        +next
+        +nil
+        +rec
+        +return
+        +select
+        +to
+        +until
+        +when
+       -Adición de el símbolo "|"
+       Autor: Joshua
+     */
+    public static final int
     // literals, identifiers, operators...
-    INTLITERAL	= 0,
-    CHARLITERAL	= 1,
-    IDENTIFIER	= 2,
-    OPERATOR	= 3,
+            INTLITERAL = 0,
+            CHARLITERAL = 1,
+            IDENTIFIER = 2,
+            OPERATOR = 3,
 
     // reserved words - must be in alphabetical order...
-    ARRAY		= 4,
-    BEGIN		= 5,
-    CONST		= 6,
-    DO			= 7,
-    ELSE		= 8,
-    END			= 9,
-    FUNC		= 10,
-    IF			= 11,
-    IN			= 12,
-    LET			= 13,
-    OF			= 14,
-    PROC		= 15,
-    RECORD		= 16,
-    THEN		= 17,
-    TYPE		= 18,
-    VAR			= 19,
-    WHILE		= 20,
+            ARRAY = 4,
+    //BEGIN		= 5,
+            CONST = 6,
+            DO = 6,
+            ELSE = 7,
+            END = 8,
+            FUNC = 9,
+            FOR = 10,
+            FROM = 11,
+            IF = 12,
+            IN = 13,
+            INIT = 14,
+            LEAVE = 15,
+            LET = 16,
+            LOCAL = 17,
+            LOOP = 18,
+            NEXT = 19,
+            NIL = 20,
+            OF = 21,
+            PROC = 22,
+            REC = 23,
+            RECORD = 24,
+            RETURN = 25,
+            SELECT = 26,
+            THEN = 27,
+            TO = 28,
+            TYPE = 29,
+            UNTIL = 30,
+            VAR = 31,
+            WHEN = 32,
+            WHILE = 33,
 
     // punctuation...
-    DOT			= 21,
-    COLON		= 22,
-    SEMICOLON	= 23,
-    COMMA		= 24,
-    BECOMES		= 25,
-    IS			= 26,
+            DOT = 34,
+            COLON = 35,
+            SEMICOLON = 36,
+            COMMA = 37,
+            BECOMES = 38,
+            IS = 39,
+            BAR = 40,
 
     // brackets...
-    LPAREN		= 27,
-    RPAREN		= 28,
-    LBRACKET	= 29,
-    RBRACKET	= 30,
-    LCURLY		= 31,
-    RCURLY		= 32,
+            LPAREN = 41,
+            RPAREN = 42,
+            LBRACKET = 43,
+            RBRACKET = 44,
+            LCURLY = 45,
+            RCURLY = 46,
 
     // special tokens...
-    EOT			= 33,
-    ERROR		= 34;
+            EOT = 47,
+            ERROR = 48;
 
-  private static String[] tokenTable = new String[] {
-    "<int>",
-    "<char>",
-    "<identifier>",
-    "<operator>",
-    "array",
-    "begin",
-    "const",
-    "do",
-    "else",
-    "end",
-    "func",
-    "if",
-    "in",
-    "let",
-    "of",
-    "proc",
-    "record",
-    "then",
-    "type",
-    "var",
-    "while",
-    ".",
-    ":",
-    ";",
-    ",",
-    ":=",
-    "~",
-    "(",
-    ")",
-    "[",
-    "]",
-    "{",
-    "}",
-    "",
-    "<error>"
-  };
+    private static String[] tokenTable = new String[]{
+            "<int>",
+            "<char>",
+            "<identifier>",
+            "<operator>",
+            "array",
+            //"begin",
+            "const",
+            "do",
+            "else",
+            "end",
+            "func",
+            "for",
+            "from",
+            "if",
+            "in",
+            "init",
+            "leave",
+            "let",
+            "local",
+            "loop",
+            "next",
+            "nil",
+            "of",
+            "proc",
+            "rec",
+            "record",
+            "return",
+            "select",
+            "then",
+            "to",
+            "type",
+            "until",
+            "var",
+            "when",
+            "while",
+            ".",
+            ":",
+            ";",
+            ",",
+            ":=",
+            "~",
+            "|",
+            "(",
+            ")",
+            "[",
+            "]",
+            "{",
+            "}",
+            "",
+            "<error>"
+    };
 
-  private final static int	firstReservedWord = Token.ARRAY,
-  				lastReservedWord  = Token.WHILE;
+    private final static int firstReservedWord = Token.ARRAY,
+            lastReservedWord = Token.WHILE;
 
 }

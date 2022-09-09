@@ -292,8 +292,13 @@ public class Parser {
         }
       }
       break;
-
-    case Token.BEGIN:
+    /*
+      CAMBIOS NUEVOS:
+      -Eliminación de single command
+      -Eliminación de comando vacío
+       Autor: Joshua
+     */
+ /*   case Token.BEGIN:
       acceptIt();
       commandAST = parseCommand();
       accept(Token.END);
@@ -332,18 +337,24 @@ public class Parser {
         finish(commandPos);
         commandAST = new WhileCommand(eAST, cAST, commandPos);
       }
-      break;
+      break;*/
 
     case Token.SEMICOLON:
     case Token.END:
     case Token.ELSE:
     case Token.IN:
-    case Token.EOT:
+    //case Token.EOT: Comando vacío eliminado
 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);
       break;
-
+    /*
+    TODO
+     - Añadir nil
+     - Añadir  nuevo Let
+     - Añadir  nuevo If
+     - Añadir loop y sus variantes
+     */
     default:
       syntacticError("\"%\" cannot start a command",
         currentToken.spelling);
@@ -682,6 +693,13 @@ public class Parser {
     return declarationAST;
   }
 
+  /* TODO
+      - Añadir compound declaration
+      - Añadir "rec" Proc-Funcs "end"
+      - Añadir "local" Declaration "in" Declaration "end"
+      - Añadir a single declaration "var" identifier "init" Expression (Declaracion de variable inicializada)
+      - Modicar Proc en single declaration
+   */
 ///////////////////////////////////////////////////////////////////////////////
 //
 // PARAMETERS
@@ -788,7 +806,10 @@ public class Parser {
     return formalAST;
   }
 
-
+  /* TODO
+      -Añadir las reglas de Proc Func
+      -Añadir las reglas de Proc Funcs
+   */
   ActualParameterSequence parseActualParameterSequence() throws SyntaxError {
     ActualParameterSequence actualsAST;
 

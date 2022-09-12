@@ -25,6 +25,11 @@ public interface Visitor {
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
 
+  /* CAMBIOS NUEVOS
+      Joshua:
+      -visitRestOfIfCommand
+   */
+  public abstract Object visitRestOfIfCommand(RestOfIf ast, Object o);
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);

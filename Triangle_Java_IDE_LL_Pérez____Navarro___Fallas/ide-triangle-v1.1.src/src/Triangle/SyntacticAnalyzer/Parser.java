@@ -79,6 +79,7 @@ import Triangle.AbstractSyntaxTrees.VarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 
 public class Parser {
 
@@ -302,16 +303,7 @@ public class Parser {
       accept(Token.END);
       break;
 
-    case Token.LET:
-      {
-        acceptIt();
-        Declaration dAST = parseDeclaration();
-        accept(Token.IN);
-        Command cAST = parseSingleCommand();
-        finish(commandPos);
-        commandAST = new LetCommand(dAST, cAST, commandPos);
-      }
-      break;
+    
 
     case Token.IF:
       {
@@ -336,6 +328,18 @@ public class Parser {
         commandAST = new WhileCommand(eAST, cAST, commandPos);
       }
       break;*/
+    case Token.LET:
+      {
+        acceptIt();
+        Declaration dAST = parseDeclaration();
+        accept(Token.IN);
+        Command cAST = parseSingleCommand();
+        accept(Token.END);
+        finish(commandPos);
+        commandAST = new LetInCommand(dAST, cAST, commandPos);
+      }
+      break;
+      
     case Token.LOOP:
         acceptIt();
         case Token.WHILE:

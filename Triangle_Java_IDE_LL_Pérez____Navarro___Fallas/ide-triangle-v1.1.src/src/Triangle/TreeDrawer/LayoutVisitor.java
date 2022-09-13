@@ -98,6 +98,7 @@ public class LayoutVisitor implements Visitor {
   public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {   // Se agrega el visit del comando LoopWhileDoCommand
     return layoutBinary("LoopWhileDoCom.", ast.E, ast.C);
   }
+  
   public Object visitLetInCommand(LetInCommand ast, Object obj) {
     return layoutBinary("LetCom.", ast.D, ast.C);
   }

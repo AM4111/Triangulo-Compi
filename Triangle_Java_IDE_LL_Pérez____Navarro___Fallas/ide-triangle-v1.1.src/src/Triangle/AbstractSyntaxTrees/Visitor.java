@@ -15,7 +15,16 @@
 package Triangle.AbstractSyntaxTrees;
 
 public interface Visitor {
-
+    
+  // Agregados - Parte 1
+  // Autores: Max Lee, Paula Mariana Bustos, Joshua Arcia
+  // Crear las funciones abstractas de cada comando
+  public abstract Object visitLetInCommand(LetInCommand ast, Object o);
+  public abstract Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o);
+  public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o);
+  public abstract Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o);
+  public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
+    
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
   public abstract Object visitCallCommand(CallCommand ast, Object o);
@@ -32,6 +41,7 @@ public interface Visitor {
    */
   public abstract Object visitRestOfIfCommand(RestOfIf ast, Object o);
   public abstract Object visitBarCommand(BarCommand ast, Object o);
+
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
@@ -110,5 +120,5 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
-
+  
 }

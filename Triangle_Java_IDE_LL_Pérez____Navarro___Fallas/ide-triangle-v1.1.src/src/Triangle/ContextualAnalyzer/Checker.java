@@ -18,9 +18,68 @@ import Triangle.AbstractSyntaxTrees.*;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 
 public final class Checker implements Visitor {
-
+    
+  // Nuevos agregados - Parte 1
+  // Autores: Max Lee y Paula Mariana Bustos  
+  // Se agrega el metodo del comando visitLoopWhileDoCommand
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+  
+  // Autores: Max Lee y Paula Mariana Bustos 
+  // Se agrega el metodo del comando visitLetInCommand
+   public Object visitLetInCommand(LetInCommand ast, Object o) {
+    ast.D.visit(this, null);
+    ast.C.visit(this, null);
+    return null;
+  }
+   
+   // Autores: Max Lee y Paula Mariana Bustos
+   // Se agrega el metodo del comando visitLoopDoWhileCommand
+   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+   
+   // Autores: Max Lee y Paula Mariana Bustos
+   // Se agrega el metodo del comando visitLoopWhileDoCommand
+   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+   
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo del comando visitLoopWhileDoCommand
+  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){
+    ast.C.visit(this, null);
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    return null;
+  }
+  
+  
   // Commands
 
   // Always returns null. Does not use the given object.

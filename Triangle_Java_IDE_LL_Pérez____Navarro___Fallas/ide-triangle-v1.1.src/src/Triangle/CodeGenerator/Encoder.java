@@ -96,15 +96,8 @@ import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 
 public final class Encoder implements Visitor {
-  // Nuevos agregado - Parte 1
+  // Nuevos agregado - Parte x
   // TODO 
-    /*
-    aiuda TwT
-    >.<
-    LoopWhileDoCommmand -> No se sabe como funciona esto del encoder
-    LetInCommand -> lo que dijo el de arriba
-    LoopDoWhileCommand -> rt
-    */
 
   // Commands
   public Object visitAssignCommand(AssignCommand ast, Object o) {

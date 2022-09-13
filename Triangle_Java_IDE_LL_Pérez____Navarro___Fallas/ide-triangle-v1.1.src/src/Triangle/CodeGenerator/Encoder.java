@@ -96,9 +96,15 @@ public final class Encoder implements Visitor {
       Joshua:
       -visitRestOfIfCommand
       -Modificación de if para que sea con rest of if
+      -visitBarCommand
    */
   @Override
   public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
+    return null;
+  }
+
+  @Override
+  public Object visitBarCommand(BarCommand ast, Object o) {
     return null;
   }
 

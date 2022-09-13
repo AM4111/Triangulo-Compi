@@ -82,10 +82,22 @@ public class TableVisitor implements Visitor {
           Joshua:
           -visitRestOfIfCommand
           -Modificación de if para que sea con rest of if
+          -VisitBarCommand
        */
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
         ast.C1.visit(this,null);
+        if (ast.BC1 != null)
+            ast.BC1.visit(this,null);
+        return null;
+    }
+
+    @Override
+    public Object visitBarCommand(BarCommand ast, Object o) {
+        ast.C1.visit(this,null);
+        ast.E1.visit(this,null);
+        if (ast.BC1 != null)
+            ast.BC1.visit(this,null);
         return null;
     }
     // </editor-fold>

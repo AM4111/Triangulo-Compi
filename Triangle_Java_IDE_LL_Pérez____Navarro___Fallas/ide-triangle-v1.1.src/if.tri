@@ -1,1 +1,2 @@
-if x then puteol() else geteol() end
+if x then dd() 
+else puteol() end

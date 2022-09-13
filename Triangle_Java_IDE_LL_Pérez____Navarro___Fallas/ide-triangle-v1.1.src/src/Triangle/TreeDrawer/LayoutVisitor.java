@@ -61,10 +61,26 @@ public class LayoutVisitor implements Visitor {
         Joshua:
         -visitRestOfIfCommand
         -Modificación de if para que sea con rest of if
+        -VisitBarCommand
      */
   @Override
   public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
-    return layoutUnary("RestOfIf.",ast.C1);
+    if (ast.BC1 == null) {
+      return layoutUnary("RestOfIf.", ast.C1);
+    }
+    else{
+      return layoutBinary("RestOfIf",ast.C1, ast.BC1);
+    }
+  }
+
+  @Override
+  public Object visitBarCommand(BarCommand ast, Object o) {
+    if (ast.BC1 != null){
+      return layoutTernary("BarCommand",ast.C1,ast.E1,ast.BC1);
+    }
+    else{
+      return layoutBinary("BarCommand",ast.C1,ast.E1);
+    }
   }
 
 

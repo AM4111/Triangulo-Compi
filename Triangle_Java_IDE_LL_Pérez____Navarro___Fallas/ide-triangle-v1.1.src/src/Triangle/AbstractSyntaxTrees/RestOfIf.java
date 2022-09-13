@@ -8,6 +8,11 @@ public class RestOfIf extends Command {
         super(thePosition);
         C1 = c1AST;
     }
+    public RestOfIf(Command c1AST , BarCommand bc1AST, SourcePosition thePosition) {
+        super(thePosition);
+        C1 = c1AST;
+        BC1 = bc1AST;
+    }
 
     @Override
     public Object visit(Visitor v, Object o) {
@@ -15,5 +20,6 @@ public class RestOfIf extends Command {
     }
 
     public Command C1;
+    public BarCommand BC1 = null;
 
 }

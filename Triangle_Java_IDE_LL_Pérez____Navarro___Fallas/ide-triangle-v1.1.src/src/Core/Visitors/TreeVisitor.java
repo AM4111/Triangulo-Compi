@@ -58,10 +58,27 @@ public class TreeVisitor implements Visitor {
           Joshua:
           -visitRestOfIfCommand
           -Modificación de if para que sea con rest of if
+          -VisitBarCommand
        */
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
-        return (createUnary("Rest of if",ast.C1));
+        if (ast.BC1 == null)
+        {
+            return (createUnary("Rest of if",ast.C1));
+        }
+        else{
+            return (createBinary("Rest of if",ast.C1,ast.BC1));
+        }
+
+    }
+
+    @Override
+    public Object visitBarCommand(BarCommand ast, Object o) {
+        if (ast.BC1 != null){
+            return (createTernary("Bar Command",ast.C1,ast.E1,ast.BC1));
+        }
+        else
+            return (createBinary("Bar Command",ast.C1,ast.E1));
     }
     // </editor-fold>
     

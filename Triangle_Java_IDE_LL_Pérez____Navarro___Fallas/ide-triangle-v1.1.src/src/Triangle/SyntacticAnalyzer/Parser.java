@@ -279,6 +279,8 @@ public class Parser {
     //Cambios Nuevos
     /*
       -If sin | y con RestOfIf
+      -If con |
+      -ParseBarCommand
      */
       case Token.IF:
       {
@@ -301,17 +303,8 @@ public class Parser {
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);
       break;
-    /*
 
 
-
-
-    TODO
-     - Añadir  nil
-     - Añadir  nuevo Let
-     - Añadir  nuevo If
-     - Añadir loop y sus variantes
-     */
     default:
       syntacticError("\"%\" cannot start a command",
         currentToken.spelling);
@@ -324,21 +317,54 @@ public class Parser {
 
   private RestOfIf parseRestOfIf() throws SyntaxError {
     RestOfIf restOfIfAST = null; // in case there's a syntactic error
+    BarCommand barCommandAST = null;
 
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
-    if (currentToken.kind == Token.ELSE) {
-      accept(Token.ELSE);
-      Command cfAST = parseCommand();
-      accept(Token.END);
-      finish(commandPos);
-      restOfIfAST = new RestOfIf(cfAST, commandPos);
+    if (currentToken.kind == Token.BAR){
+      acceptIt();
+      barCommandAST = parseBarCommand();
+    }
+    accept(Token.ELSE);
+    Command c1 = parseCommand();
+    accept(Token.END);
+
+    finish(commandPos);
+    if (barCommandAST == null){
+      restOfIfAST = new RestOfIf(c1,commandPos);
     }
     else{
-      syntacticError("\"%\" cannot start a command",
-              currentToken.spelling);
+      restOfIfAST = new RestOfIf(c1,barCommandAST,commandPos);
     }
+
     return restOfIfAST;
+  }
+
+  private BarCommand parseBarCommand() throws SyntaxError {
+    BarCommand barCommandAST = null; // in case there's a syntactic error
+    BarCommand nestedBarCommandAST = null;
+
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+
+    Expression e1AST = parseExpression();
+    accept(Token.THEN);
+    Command c1AST = parseCommand();
+    if (currentToken.kind == Token.BAR){
+      acceptIt();
+      nestedBarCommandAST = parseBarCommand();
+    }
+
+    finish(commandPos);
+    if (nestedBarCommandAST == null)
+    {
+      barCommandAST = new BarCommand(e1AST,c1AST,commandPos);
+    }
+    else{
+      barCommandAST = new BarCommand(e1AST,c1AST,nestedBarCommandAST,commandPos);
+    }
+
+    return barCommandAST;
   }
 
 ///////////////////////////////////////////////////////////////////////////////

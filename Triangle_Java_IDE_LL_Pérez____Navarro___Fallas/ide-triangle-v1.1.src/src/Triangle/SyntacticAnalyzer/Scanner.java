@@ -152,6 +152,10 @@ public final class Scanner {
       takeIt();
       return Token.IS;
 
+    case '|':
+      takeIt();
+      return Token.BAR;
+
     case '(':
       takeIt();
       return Token.LPAREN;

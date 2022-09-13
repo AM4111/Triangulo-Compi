@@ -17,9 +17,11 @@ package Triangle.AbstractSyntaxTrees;
 public interface Visitor {
     
   // Agregados - Parte 1
-  public abstract Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o);
   public abstract Object visitLetInCommand(LetInCommand ast, Object o);
-    
+  public abstract Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o);
+  public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o);
+  public abstract Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o);
+  public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
     
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);

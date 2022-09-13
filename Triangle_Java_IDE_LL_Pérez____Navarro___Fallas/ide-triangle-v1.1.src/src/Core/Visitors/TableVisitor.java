@@ -77,8 +77,11 @@ import Triangle.CodeGenerator.UnknownAddress;
 import Triangle.CodeGenerator.UnknownRoutine;
 import Triangle.CodeGenerator.UnknownValue;
 import javax.swing.table.DefaultTableModel;
-import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 import Triangle.AbstractSyntaxTrees.LetInCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 
 /**
  * Implements the Triangle Visitor interface, which is used to
@@ -97,6 +100,13 @@ public class TableVisitor implements Visitor {
   // <editor-fold defaultstate="collapsed" desc=" Commands ">
    
   // Nuevo agregado - Parte 1
+  public Object visitLetInCommand(LetInCommand ast, Object o) { 
+      ast.D.visit(this, null);
+      ast.C.visit(this, null);
+      
+      return(null);
+  }
+  
   public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) { 
       ast.E.visit(this, null);
       ast.C.visit(this, null);
@@ -104,10 +114,24 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
-  public Object visitLetInCommand(LetInCommand ast, Object o) { 
-      ast.D.visit(this, null);
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o) { 
       ast.C.visit(this, null);
+      ast.E.visit(this, null);
       
+      return(null);
+  }
+  
+  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o) { 
+      ast.E.visit(this, null);
+      ast.C.visit(this, null);
+
+      return(null);
+  }
+
+   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) { 
+      ast.C.visit(this, null);
+      ast.E.visit(this, null);
+
       return(null);
   }
   

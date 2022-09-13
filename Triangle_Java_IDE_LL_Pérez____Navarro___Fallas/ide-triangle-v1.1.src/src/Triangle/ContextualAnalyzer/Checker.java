@@ -86,8 +86,11 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
-import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 import Triangle.AbstractSyntaxTrees.LetInCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 
 public final class Checker implements Visitor {
     
@@ -105,6 +108,33 @@ public final class Checker implements Visitor {
    public Object visitLetInCommand(LetInCommand ast, Object o) {
     ast.D.visit(this, null);
     ast.C.visit(this, null);
+    return null;
+  }
+   
+   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){         // Se agrega el metodo del comando visitLoopDoWhileCommand
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+   
+   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+   
+  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
+    ast.C.visit(this, null);
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
     return null;
   }
   

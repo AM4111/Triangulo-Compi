@@ -89,7 +89,11 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDopWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 
 public final class Encoder implements Visitor {
   // Nuevos agregado - Parte 1
@@ -99,6 +103,7 @@ public final class Encoder implements Visitor {
     >.<
     LoopWhileDoCommmand -> No se sabe como funciona esto del encoder
     LetInCommand -> lo que dijo el de arriba
+    LoopDoWhileCommand -> rt
     */
 
   // Commands

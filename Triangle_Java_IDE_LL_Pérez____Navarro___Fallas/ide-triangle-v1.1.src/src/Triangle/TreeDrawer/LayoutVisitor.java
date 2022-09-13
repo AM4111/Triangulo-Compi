@@ -85,6 +85,7 @@ import Triangle.AbstractSyntaxTrees.LetInCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
 
 public class LayoutVisitor implements Visitor {
 
@@ -120,6 +121,12 @@ public class LayoutVisitor implements Visitor {
   // Se agrega el visit del comando LoopDoUntilCommand
   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
     return layoutBinary("LoopDoUntilCom.", ast.C, ast.E);
+  }
+  
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopForFromToDoCommand
+  public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object obj) {
+    return layoutQuaternary("LoopForFromToDoComm.", ast.I, ast.E1, ast.E2, ast.C);
   }
   
   // Autores: Max Lee y Paula Mariana Bustos

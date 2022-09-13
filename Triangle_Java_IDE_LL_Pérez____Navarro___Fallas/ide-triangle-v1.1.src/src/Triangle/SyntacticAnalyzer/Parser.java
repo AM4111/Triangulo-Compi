@@ -378,6 +378,54 @@ public class Parser {
                         commandAST = new LoopUntilDoCommand(eAST, cAST, commandPos);
                     }
                     break;
+                    // Crear el caso del "loop for ident from exp1 to exp2"
+                    case Token.FOR: {
+                        acceptIt();
+                        Identifier iAST = parseIdentifier();
+                        accept(Token.FROM);
+                        Expression eAST1 = parseExpression();
+                        accept(Token.TO);
+                        Expression eAST2 = parseExpression();
+                        switch (currentToken.kind) {
+                            // Crear el caso del "loop for ident from exp1 to exp2 do comm end"
+                            case Token.DO: {
+                                acceptIt();
+                                Command cAST = parseCommand();
+                                accept(Token.END);
+                                finish(commandPos);
+                                //commandAST = new LoopForFromToDoCommand(iAST, eAST1, eAST2, cAST, commandPos)
+                            }
+                            break;
+                            // Crear el caso del "loop for ident from exp1 to exp2 while exp3 do comm end"
+                            case Token.WHILE: {
+                                acceptIt();
+                                Expression eAST3 = parseExpression();
+                                accept(Token.DO);
+                                Command cAST = parseCommand();
+                                accept(Token.END);
+                                finish(commandPos);
+                                //commandAST = new LoopForFromToWhileDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos)
+                            }
+                            break;
+                            // Crear el caso del "loop for ident from exp1 to exp2 until exp3 do comm end"
+                            case Token.UNTIL: {
+                                acceptIt();
+                                Expression eAST3 = parseExpression();
+                                accept(Token.DO);
+                                Command cAST = parseCommand();
+                                accept(Token.END);
+                                finish(commandPos);
+                                //commandAST = new LoopForFromToUntilDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos)
+                            }
+                            break;
+                            default:
+                                // Caso predetermidado por si no coincide con algun caso anterior del "loop for ident from exp1 to exp2"
+                                syntacticError("\"%\" cannot start a command",
+                                        currentToken.spelling);
+                                break;
+                        }
+                    }
+                    break;
                     // Caso predetermidado por si no coincide con algun caso anterior del "loop"
                     default:
                         syntacticError("\"%\" cannot start a command",

@@ -74,6 +74,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
 
 /**
  * Implements the Triangle Visitor interface, which is used to
@@ -121,6 +122,12 @@ public class TreeVisitor implements Visitor {
     // Crear el binario del LoopUntilDoCommand
     public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object obj) {
         return(createBinary("Loop Until Do Command", ast.E, ast.C));
+    }
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopForFromToDoCommand
+    public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object obj) {
+        return(createQuaternary("Loop For From To Do Command", ast.I, ast.E1, ast.E2, ast.C));
     }
     
     // Commands  

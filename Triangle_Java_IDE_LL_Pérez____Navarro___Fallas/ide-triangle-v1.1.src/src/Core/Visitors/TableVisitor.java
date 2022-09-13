@@ -82,6 +82,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
 
 /**
  * Implements the Triangle Visitor interface, which is used to
@@ -136,7 +137,16 @@ public class TableVisitor implements Visitor {
    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) { 
       ast.C.visit(this, null);
       ast.E.visit(this, null);
-
+      return(null);
+  }
+   
+   // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LoopForFromToDoCommand
+   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) { 
+       ast.I.visit(this, null);
+       ast.E1.visit(this, null);
+       ast.E2.visit(this, null);
+       ast.C.visit(this, null);
       return(null);
   }
   

@@ -343,7 +343,7 @@ public class Parser {
                 acceptIt();
                 Expression eAST = parseExpression();
                 accept(Token.DO);
-                Command cAST = parseSingleCommand();
+                Command cAST = parseCommand();
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new LoopWhileDoCommand(eAST, cAST, commandPos);

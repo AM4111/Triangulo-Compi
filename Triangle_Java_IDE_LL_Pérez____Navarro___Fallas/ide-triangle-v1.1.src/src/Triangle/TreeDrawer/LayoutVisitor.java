@@ -81,6 +81,7 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 
 public class LayoutVisitor implements Visitor {
 
@@ -94,9 +95,13 @@ public class LayoutVisitor implements Visitor {
   }
 
   // Nuevos agregado - Parte 1
-  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) { // Se agrega el visit del comando LoopWhileDoCommand
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {   // Se agrega el visit del comando LoopWhileDoCommand
     return layoutBinary("LoopWhileDoCom.", ast.E, ast.C);
   }
+  public Object visitLetInCommand(LetInCommand ast, Object obj) {
+    return layoutBinary("LetCom.", ast.D, ast.C);
+  }
+  
   // Commands
   public Object visitAssignCommand(AssignCommand ast, Object obj) {
     return layoutBinary("AssignCom.", ast.V, ast.E);

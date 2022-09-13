@@ -98,6 +98,7 @@ public final class Encoder implements Visitor {
     aiuda TwT
     >.<
     LoopWhileDoCommmand -> No se sabe como funciona esto del encoder
+    LetInCommand -> lo que dijo el de arriba
     */
 
   // Commands

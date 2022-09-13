@@ -87,7 +87,6 @@ final class Token extends Object {
 
     // reserved words - must be in alphabetical order...
             ARRAY = 4,
-    //BEGIN		= 5,
             CONST = 6,
             DO = 6,
             ELSE = 7,
@@ -145,7 +144,6 @@ final class Token extends Object {
             "<identifier>",
             "<operator>",
             "array",
-            //"begin",
             "const",
             "do",
             "else",

@@ -78,6 +78,7 @@ import Triangle.CodeGenerator.UnknownRoutine;
 import Triangle.CodeGenerator.UnknownValue;
 import javax.swing.table.DefaultTableModel;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 
 /**
  * Implements the Triangle Visitor interface, which is used to
@@ -98,6 +99,13 @@ public class TableVisitor implements Visitor {
   // Nuevo agregado - Parte 1
   public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) { 
       ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      
+      return(null);
+  }
+  
+  public Object visitLetInCommand(LetInCommand ast, Object o) { 
+      ast.D.visit(this, null);
       ast.C.visit(this, null);
       
       return(null);

@@ -70,6 +70,7 @@ import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import javax.swing.tree.DefaultMutableTreeNode;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 
 /**
  * Implements the Triangle Visitor interface, which is used to
@@ -91,6 +92,10 @@ public class TreeVisitor implements Visitor {
     // Nuevo agregado - Parte 1
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {
         return(createBinary("Loop While Do Command", ast.E, ast.C));
+    }
+    
+    public Object visitLetInCommand(LetInCommand ast, Object obj) {
+        return(createBinary("Let in Command", ast.D, ast.C));
     }
     
     // Commands  

@@ -87,6 +87,7 @@ import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LetInCommand;
 
 public final class Checker implements Visitor {
     
@@ -97,6 +98,12 @@ public final class Checker implements Visitor {
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError(
               "Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+  
+   public Object visitLetInCommand(LetInCommand ast, Object o) {
+    ast.D.visit(this, null);
     ast.C.visit(this, null);
     return null;
   }

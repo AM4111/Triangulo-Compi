@@ -262,7 +262,6 @@ public class Parser {
         start(commandPos);
 
         switch (currentToken.kind) {
-
             case Token.IDENTIFIER: {
                 Identifier iAST = parseIdentifier();
                 if (currentToken.kind == Token.LPAREN) {
@@ -308,17 +307,7 @@ public class Parser {
         commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
       }
       break;
-
-    case Token.WHILE:
-      {
-        acceptIt();
-        Expression eAST = parseExpression();
-        accept(Token.DO);
-        Command cAST = parseSingleCommand();
-        finish(commandPos);
-        commandAST = new WhileCommand(eAST, cAST, commandPos);
-      }
-      break;*/
+*/
             case Token.LET: {
                 acceptIt();
                 Declaration dAST = parseDeclaration();
@@ -329,7 +318,6 @@ public class Parser {
                 commandAST = new LetInCommand(dAST, cAST, commandPos);
             }
             break;
-
             case Token.LOOP:
                 acceptIt();
                 switch (currentToken.kind) {
@@ -389,19 +377,25 @@ public class Parser {
             case Token.SEMICOLON:
             case Token.END:
             case Token.ELSE:
-            case Token.IN:
+            /*case Token.IN:
                 //case Token.EOT: Comando vacío eliminado
 
                 finish(commandPos);
                 commandAST = new EmptyCommand(commandPos);
-                break;
-            /*
+                break;*/
+ /*
     TODO
      - Añadir nil
      - Añadir  nuevo Let
      - Añadir  nuevo If
      - Añadir loop y sus variantes
              */
+            case Token.NIL: {
+                acceptIt();
+                finish(commandPos);
+                commandAST = new EmptyCommand(commandPos);
+            }
+            break;
             default:
                 syntacticError("\"%\" cannot start a command",
                         currentToken.spelling);

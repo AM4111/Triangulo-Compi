@@ -18,18 +18,20 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IfCommand extends Command {
 
-  public IfCommand (Expression eAST, Command c1AST, Command c2AST,
+  public IfCommand (Expression eAST, Command c1AST, RestOfIf roi1AST,
                     SourcePosition thePosition) {
     super (thePosition);
     E = eAST;
     C1 = c1AST;
-    C2 = c2AST;
+    ROI1 = roi1AST;
   }
-
+  // Autor: Joshua
+  // Modificación del if, para que el AST se cree en dos partes
   public Object visit(Visitor v, Object o) {
     return v.visitIfCommand(this, o);
   }
 
   public Expression E;
-  public Command C1, C2;
+  public Command C1;
+  public RestOfIf ROI1;
 }

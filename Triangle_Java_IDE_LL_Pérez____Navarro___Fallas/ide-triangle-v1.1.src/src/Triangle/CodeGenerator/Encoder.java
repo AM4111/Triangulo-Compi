@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import TAM.Instruction;
 import TAM.Machine;
+import Triangle.AbstractSyntaxTrees.*;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.AbstractSyntaxTrees.AST;
@@ -131,7 +132,7 @@ public final class Encoder implements Visitor {
     jumpAddr = nextInstrAddr;
     emit(Machine.JUMPop, 0, Machine.CBr, 0);
     patch(jumpifAddr, nextInstrAddr);
-    ast.C2.visit(this, frame);
+    ast.ROI1.visit(this, frame);
     patch(jumpAddr, nextInstrAddr);
     return null;
   }
@@ -162,6 +163,21 @@ public final class Encoder implements Visitor {
     patch(jumpAddr, nextInstrAddr);
     ast.E.visit(this, frame);
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+    return null;
+  }
+  /* CAMBIOS NUEVOS
+      Joshua:
+      -visitRestOfIfCommand
+      -Modificación de if para que sea con rest of if
+      -visitBarCommand
+   */
+  @Override
+  public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
+    return null;
+  }
+
+  @Override
+  public Object visitBarCommand(BarCommand ast, Object o) {
     return null;
   }
 

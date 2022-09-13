@@ -4,70 +4,8 @@
  */
 
 package Core.Visitors;
-import Triangle.AbstractSyntaxTrees.AST;
-import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
-import Triangle.AbstractSyntaxTrees.ArrayExpression;
-import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
-import Triangle.AbstractSyntaxTrees.AssignCommand;
-import Triangle.AbstractSyntaxTrees.BinaryExpression;
-import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CallCommand;
-import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CharacterExpression;
-import Triangle.AbstractSyntaxTrees.CharacterLiteral;
-import Triangle.AbstractSyntaxTrees.ConstActualParameter;
-import Triangle.AbstractSyntaxTrees.ConstDeclaration;
-import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
-import Triangle.AbstractSyntaxTrees.DotVname;
-import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
-import Triangle.AbstractSyntaxTrees.EmptyExpression;
-import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
-import Triangle.AbstractSyntaxTrees.FuncActualParameter;
-import Triangle.AbstractSyntaxTrees.FuncDeclaration;
-import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
-import Triangle.AbstractSyntaxTrees.Identifier;
-import Triangle.AbstractSyntaxTrees.IfCommand;
-import Triangle.AbstractSyntaxTrees.IfExpression;
-import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
-import Triangle.AbstractSyntaxTrees.IntegerExpression;
-import Triangle.AbstractSyntaxTrees.IntegerLiteral;
-import Triangle.AbstractSyntaxTrees.LetCommand;
-import Triangle.AbstractSyntaxTrees.LetExpression;
-import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.Operator;
-import Triangle.AbstractSyntaxTrees.ProcActualParameter;
-import Triangle.AbstractSyntaxTrees.ProcDeclaration;
-import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
-import Triangle.AbstractSyntaxTrees.Program;
-import Triangle.AbstractSyntaxTrees.RecordExpression;
-import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SequentialCommand;
-import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
-import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SimpleVname;
-import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.SingleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SingleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.SubscriptVname;
-import Triangle.AbstractSyntaxTrees.TypeDeclaration;
-import Triangle.AbstractSyntaxTrees.UnaryExpression;
-import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.VarActualParameter;
-import Triangle.AbstractSyntaxTrees.VarDeclaration;
-import Triangle.AbstractSyntaxTrees.VarFormalParameter;
-import Triangle.AbstractSyntaxTrees.Visitor;
-import Triangle.AbstractSyntaxTrees.VnameExpression;
-import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.*;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import Triangle.AbstractSyntaxTrees.LetInCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
@@ -82,7 +20,7 @@ import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
  *
  * Generates DefaultMutableTreeNodes, used to draw a JTree.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Pï¿½rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class TreeVisitor implements Visitor {
       
@@ -144,7 +82,7 @@ public class TreeVisitor implements Visitor {
     }
     
     public Object visitIfCommand(IfCommand ast, Object obj) {
-        return(createTernary("If Command", ast.E, ast.C1, ast.C2));
+        return(createTernary("If Command", ast.E, ast.C1, ast.ROI1));
     }
     
     public Object visitLetCommand(LetCommand ast, Object obj) {
@@ -157,6 +95,33 @@ public class TreeVisitor implements Visitor {
     
     public Object visitWhileCommand(WhileCommand ast, Object obj) {
         return(createBinary("While Command", ast.E, ast.C));
+    }
+
+    /* CAMBIOS NUEVOS
+          Joshua:
+          -visitRestOfIfCommand
+          -ModificaciÃ³n de if para que sea con rest of if
+          -VisitBarCommand
+       */
+    @Override
+    public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
+        if (ast.BC1 == null)
+        {
+            return (createUnary("Rest of if",ast.C1));
+        }
+        else{
+            return (createBinary("Rest of if",ast.C1,ast.BC1));
+        }
+
+    }
+
+    @Override
+    public Object visitBarCommand(BarCommand ast, Object o) {
+        if (ast.BC1 != null){
+            return (createTernary("Bar Command",ast.C1,ast.E1,ast.BC1));
+        }
+        else
+            return (createBinary("Bar Command",ast.C1,ast.E1));
     }
     // </editor-fold>
     

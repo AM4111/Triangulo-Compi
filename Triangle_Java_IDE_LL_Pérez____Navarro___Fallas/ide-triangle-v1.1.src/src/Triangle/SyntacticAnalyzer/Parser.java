@@ -13,75 +13,10 @@
  */
 package Triangle.SyntacticAnalyzer;
 
+import Triangle.AbstractSyntaxTrees.*;
 import Triangle.ErrorReporter;
-import Triangle.AbstractSyntaxTrees.ActualParameter;
-import Triangle.AbstractSyntaxTrees.ActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.ArrayAggregate;
-import Triangle.AbstractSyntaxTrees.ArrayExpression;
-import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
-import Triangle.AbstractSyntaxTrees.AssignCommand;
-import Triangle.AbstractSyntaxTrees.BinaryExpression;
-import Triangle.AbstractSyntaxTrees.CallCommand;
-import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CharacterExpression;
-import Triangle.AbstractSyntaxTrees.CharacterLiteral;
-import Triangle.AbstractSyntaxTrees.Command;
-import Triangle.AbstractSyntaxTrees.ConstActualParameter;
-import Triangle.AbstractSyntaxTrees.ConstDeclaration;
-import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
-import Triangle.AbstractSyntaxTrees.Declaration;
-import Triangle.AbstractSyntaxTrees.DotVname;
-import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
-import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.Expression;
-import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.FormalParameter;
-import Triangle.AbstractSyntaxTrees.FormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.FuncActualParameter;
-import Triangle.AbstractSyntaxTrees.FuncDeclaration;
-import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
-import Triangle.AbstractSyntaxTrees.Identifier;
-import Triangle.AbstractSyntaxTrees.IfExpression;
-import Triangle.AbstractSyntaxTrees.IntegerExpression;
-import Triangle.AbstractSyntaxTrees.IntegerLiteral;
-import Triangle.AbstractSyntaxTrees.LetExpression;
-import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
-import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.Operator;
-import Triangle.AbstractSyntaxTrees.ProcActualParameter;
-import Triangle.AbstractSyntaxTrees.ProcDeclaration;
-import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
-import Triangle.AbstractSyntaxTrees.Program;
-import Triangle.AbstractSyntaxTrees.RecordAggregate;
-import Triangle.AbstractSyntaxTrees.RecordExpression;
-import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SequentialCommand;
-import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
-import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SimpleVname;
-import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.SingleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SingleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.SubscriptVname;
-import Triangle.AbstractSyntaxTrees.TypeDeclaration;
-import Triangle.AbstractSyntaxTrees.TypeDenoter;
-import Triangle.AbstractSyntaxTrees.UnaryExpression;
-import Triangle.AbstractSyntaxTrees.VarActualParameter;
-import Triangle.AbstractSyntaxTrees.VarDeclaration;
-import Triangle.AbstractSyntaxTrees.VarFormalParameter;
-import Triangle.AbstractSyntaxTrees.Vname;
-import Triangle.AbstractSyntaxTrees.VnameExpression;
-import Triangle.AbstractSyntaxTrees.LetInCommand;
-import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
-import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
-import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+
+//import java.lang.runtime.SwitchBootstraps;
 
 public class Parser {
 
@@ -295,19 +230,24 @@ public class Parser {
 
     
 
-    case Token.IF:
-      {
-        acceptIt();
-        Expression eAST = parseExpression();
-        accept(Token.THEN);
-        Command c1AST = parseSingleCommand();
-        accept(Token.ELSE);
-        Command c2AST = parseSingleCommand();
-        finish(commandPos);
-        commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
-      }
-      break;
-             */
+    
+    //Cambios Nuevos
+    /*
+      -If sin | y con RestOfIf
+      -If con |
+      -ParseBarCommand
+     */
+            case Token.IF: {
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.THEN);
+                Command c1AST = parseCommand(); //Cambio de singlecommand a Command
+                RestOfIf roi1AST = parseRestOfIf();
+                finish(commandPos);
+                commandAST = new IfCommand(eAST, c1AST, roi1AST, commandPos);
+            }
+            break;
+
             // Autores: Max Lee y Paula Mariana Bustos
             // Crear el caso del "let decl in comm end"
             case Token.LET: {
@@ -441,6 +381,8 @@ public class Parser {
                 finish(commandPos);
                 commandAST = new EmptyCommand(commandPos);
                 break;
+
+
             // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
             // Crear el caso "nil"
             case Token.NIL: {
@@ -456,9 +398,63 @@ public class Parser {
                 break;
 
         }
-
         return commandAST;
     }
+
+
+
+
+  private RestOfIf parseRestOfIf() throws SyntaxError {
+    RestOfIf restOfIfAST = null; // in case there's a syntactic error
+    BarCommand barCommandAST = null;
+
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+    if (currentToken.kind == Token.BAR){
+      acceptIt();
+      barCommandAST = parseBarCommand();
+    }
+    accept(Token.ELSE);
+    Command c1 = parseCommand();
+    accept(Token.END);
+
+    finish(commandPos);
+    if (barCommandAST == null){
+      restOfIfAST = new RestOfIf(c1,commandPos);
+    }
+    else{
+      restOfIfAST = new RestOfIf(c1,barCommandAST,commandPos);
+    }
+
+    return restOfIfAST;
+  }
+
+  private BarCommand parseBarCommand() throws SyntaxError {
+    BarCommand barCommandAST = null; // in case there's a syntactic error
+    BarCommand nestedBarCommandAST = null;
+
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+
+    Expression e1AST = parseExpression();
+    accept(Token.THEN);
+    Command c1AST = parseCommand();
+    if (currentToken.kind == Token.BAR){
+      acceptIt();
+      nestedBarCommandAST = parseBarCommand();
+    }
+
+    finish(commandPos);
+    if (nestedBarCommandAST == null)
+    {
+      barCommandAST = new BarCommand(e1AST,c1AST,commandPos);
+    }
+    else{
+      barCommandAST = new BarCommand(e1AST,c1AST,nestedBarCommandAST,commandPos);
+    }
+
+    return barCommandAST;
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 //

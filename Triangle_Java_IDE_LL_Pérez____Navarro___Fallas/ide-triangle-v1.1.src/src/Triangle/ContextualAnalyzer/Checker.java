@@ -95,8 +95,9 @@ import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 public final class Checker implements Visitor {
     
   // Nuevos agregados - Parte 1
-    
-  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
+  // Autores: Max Lee y Paula Mariana Bustos  
+  // Se agrega el metodo del comando visitLoopWhileDoCommand
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError(
@@ -105,13 +106,17 @@ public final class Checker implements Visitor {
     return null;
   }
   
+  // Autores: Max Lee y Paula Mariana Bustos 
+  // Se agrega el metodo del comando visitLetInCommand
    public Object visitLetInCommand(LetInCommand ast, Object o) {
     ast.D.visit(this, null);
     ast.C.visit(this, null);
     return null;
   }
    
-   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){         // Se agrega el metodo del comando visitLoopDoWhileCommand
+   // Autores: Max Lee y Paula Mariana Bustos
+   // Se agrega el metodo del comando visitLoopDoWhileCommand
+   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError(
@@ -120,7 +125,9 @@ public final class Checker implements Visitor {
     return null;
   }
    
-   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
+   // Autores: Max Lee y Paula Mariana Bustos
+   // Se agrega el metodo del comando visitLoopWhileDoCommand
+   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError(
@@ -129,7 +136,9 @@ public final class Checker implements Visitor {
     return null;
   }
    
-  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo del comando visitLoopWhileDoCommand
+  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){
     ast.C.visit(this, null);
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))

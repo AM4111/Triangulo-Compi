@@ -93,22 +93,32 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Commands "> 
     // Nuevo agregado - Parte 1
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LetInCommand
     public Object visitLetInCommand(LetInCommand ast, Object obj) {
         return(createBinary("Let in Command", ast.D, ast.C));
     }
     
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopWhileDoCommand
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {
         return(createBinary("Loop While Do Command", ast.E, ast.C));
     }
     
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopDoWhileCommand
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
         return(createBinary("Loop Do While Command", ast.C, ast.E));
     }
     
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopDoUntilCommnad
     public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
         return(createBinary("Loop Do Until Command", ast.C, ast.E));
     }
-
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopUntilDoCommand
     public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object obj) {
         return(createBinary("Loop Until Do Command", ast.E, ast.C));
     }

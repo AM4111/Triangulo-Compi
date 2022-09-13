@@ -17,6 +17,8 @@ package Triangle.AbstractSyntaxTrees;
 public interface Visitor {
     
   // Agregados - Parte 1
+  // Autores: Max Lee, Paula Mariana Bustos, Joshua Arcia
+  // Crear las funciones abstractas de cada comando
   public abstract Object visitLetInCommand(LetInCommand ast, Object o);
   public abstract Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o);
   public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o);

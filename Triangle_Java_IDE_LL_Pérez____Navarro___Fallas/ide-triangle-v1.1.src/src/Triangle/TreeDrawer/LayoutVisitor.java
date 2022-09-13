@@ -98,22 +98,32 @@ public class LayoutVisitor implements Visitor {
   }
 
   // Nuevos agregado - Parte 1
-  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {   // Se agrega el visit del comando LoopWhileDoCommand
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopWhileDoCommand
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) {
     return layoutBinary("LoopWhileDoCom.", ast.E, ast.C);
   }
   
-  public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {   // Se agrega el visit del comando LoopDoWhileCommand
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopDoWhileCommand
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
     return layoutBinary("LoopDoWhileCom.", ast.C, ast.E);
   }
   
-  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object obj) {   // Se agrega el visit del comando LoopUntilDoCommand
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopUntilDoCommand
+  public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object obj) {
     return layoutBinary("LoopUntilDoCom.", ast.E, ast.C);
   }
   
-  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {   // Se agrega el visit del comando LoopDoUntilCommand
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopDoUntilCommand
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
     return layoutBinary("LoopDoUntilCom.", ast.C, ast.E);
   }
   
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LetInCommand
   public Object visitLetInCommand(LetInCommand ast, Object obj) {
     return layoutBinary("LetCom.", ast.D, ast.C);
   }

@@ -307,20 +307,25 @@ public class Parser {
         commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
       }
       break;
-*/
+             */
+            // Autores: Max Lee y Paula Mariana Bustos
+            // Crear el caso del "let decl in comm end"
             case Token.LET: {
                 acceptIt();
                 Declaration dAST = parseDeclaration();
                 accept(Token.IN);
-                Command cAST = parseSingleCommand();
+                Command cAST = parseCommand();
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new LetInCommand(dAST, cAST, commandPos);
             }
             break;
+            // Autores: Max Lee y Paula Mariana Bustos 
+            // Crear el caso "loop"
             case Token.LOOP:
                 acceptIt();
                 switch (currentToken.kind) {
+                    // Crear el caso del "loop while exp do comm end"
                     case Token.WHILE: {
                         acceptIt();
                         Expression eAST = parseExpression();
@@ -331,10 +336,12 @@ public class Parser {
                         commandAST = new LoopWhileDoCommand(eAST, cAST, commandPos);
                     }
                     break;
+                    // Crear el caso del "loop do comm"
                     case Token.DO: {
                         acceptIt();
                         Command cAST = parseCommand();
                         switch (currentToken.kind) {
+                            // Crear el caso del "loop do comm while exp end"
                             case Token.WHILE: {
                                 acceptIt();
                                 Expression eAST = parseExpression();
@@ -343,6 +350,7 @@ public class Parser {
                                 commandAST = new LoopDoWhileCommand(cAST, eAST, commandPos);
                             }
                             break;
+                            // Crear el caso del "loop do comm until exp end"
                             case Token.UNTIL: {
                                 acceptIt();
                                 Expression eAST = parseExpression();
@@ -351,6 +359,7 @@ public class Parser {
                                 commandAST = new LoopDoUntilCommand(cAST, eAST, commandPos);
                             }
                             break;
+                            // Caso predetermidado por si no coincide con algun caso anterior del "loop do"
                             default:
                                 syntacticError("\"%\" cannot start a command",
                                         currentToken.spelling);
@@ -358,6 +367,7 @@ public class Parser {
                         }
                     }
                     break;
+                    // Crear el caso del "loop until exp do comm end"
                     case Token.UNTIL: {
                         acceptIt();
                         Expression eAST = parseExpression();
@@ -368,6 +378,7 @@ public class Parser {
                         commandAST = new LoopUntilDoCommand(eAST, cAST, commandPos);
                     }
                     break;
+                    // Caso predetermidado por si no coincide con algun caso anterior del "loop"
                     default:
                         syntacticError("\"%\" cannot start a command",
                                 currentToken.spelling);
@@ -377,25 +388,20 @@ public class Parser {
             case Token.SEMICOLON:
             case Token.END:
             case Token.ELSE:
-            /*case Token.IN:
+            case Token.IN:
                 //case Token.EOT: Comando vacío eliminado
-
                 finish(commandPos);
                 commandAST = new EmptyCommand(commandPos);
-                break;*/
- /*
-    TODO
-     - Añadir nil
-     - Añadir  nuevo Let
-     - Añadir  nuevo If
-     - Añadir loop y sus variantes
-             */
+                break;
+            // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
+            // Crear el caso "nil"
             case Token.NIL: {
                 acceptIt();
                 finish(commandPos);
                 commandAST = new EmptyCommand(commandPos);
             }
             break;
+            // Caso predetermidado por si no coincide con algun caso anterior
             default:
                 syntacticError("\"%\" cannot start a command",
                         currentToken.spelling);

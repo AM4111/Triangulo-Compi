@@ -100,34 +100,39 @@ public class TableVisitor implements Visitor {
   // <editor-fold defaultstate="collapsed" desc=" Commands ">
    
   // Nuevo agregado - Parte 1
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LetInCommand
   public Object visitLetInCommand(LetInCommand ast, Object o) { 
       ast.D.visit(this, null);
       ast.C.visit(this, null);
-      
       return(null);
   }
   
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LoopWhileDoCommand
   public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) { 
       ast.E.visit(this, null);
       ast.C.visit(this, null);
-      
       return(null);
   }
   
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LoopDoWhileCommand
   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o) { 
       ast.C.visit(this, null);
       ast.E.visit(this, null);
-      
       return(null);
   }
   
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LoopUntilDoCommand
   public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o) { 
       ast.E.visit(this, null);
       ast.C.visit(this, null);
-
       return(null);
   }
-
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo visitor de LoopDoUntilCommand
    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) { 
       ast.C.visit(this, null);
       ast.E.visit(this, null);

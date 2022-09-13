@@ -237,18 +237,17 @@ public class Parser {
       -If con |
       -ParseBarCommand
      */
-      case Token.IF:
-      {
-        acceptIt();
-        Expression eAST = parseExpression();
-        accept(Token.THEN);
-        Command c1AST = parseCommand(); //Cambio de singlecommand a Command
-        RestOfIf roi1AST = parseRestOfIf();
-        finish(commandPos);
-        commandAST = new IfCommand(eAST, c1AST, roi1AST, commandPos);
-      }
-      break;
-             */
+            case Token.IF: {
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.THEN);
+                Command c1AST = parseCommand(); //Cambio de singlecommand a Command
+                RestOfIf roi1AST = parseRestOfIf();
+                finish(commandPos);
+                commandAST = new IfCommand(eAST, c1AST, roi1AST, commandPos);
+            }
+            break;
+
             // Autores: Max Lee y Paula Mariana Bustos
             // Crear el caso del "let decl in comm end"
             case Token.LET: {
@@ -334,6 +333,8 @@ public class Parser {
                 finish(commandPos);
                 commandAST = new EmptyCommand(commandPos);
                 break;
+
+
             // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
             // Crear el caso "nil"
             case Token.NIL: {
@@ -348,6 +349,7 @@ public class Parser {
                         currentToken.spelling);
                 break;
 
+        }
         return commandAST;
     }
 

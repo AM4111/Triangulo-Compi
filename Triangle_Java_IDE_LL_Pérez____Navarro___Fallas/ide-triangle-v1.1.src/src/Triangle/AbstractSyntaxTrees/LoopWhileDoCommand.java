@@ -13,7 +13,8 @@ public class LoopWhileDoCommand extends Command {
     public Expression E;
     public Command C;
 
-    public LoopWhileDoCommand(Expression eAST, Command cAST, SourcePosition thePosition) {
+    public LoopWhileDoCommand(Expression eAST, Command cAST, 
+            SourcePosition thePosition) {
         super(thePosition);
         E = eAST;
         C = cAST;

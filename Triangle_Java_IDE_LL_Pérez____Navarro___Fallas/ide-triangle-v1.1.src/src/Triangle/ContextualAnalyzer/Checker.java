@@ -91,10 +91,12 @@ import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 public final class Checker implements Visitor {
     
   // Nuevos agregados - Parte 1
-  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){ // Se agrega el metodo del comando visitLoopWhileDoCommand
+    
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){         // Se agrega el metodo del comando visitLoopWhileDoCommand
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
-      reporter.reportError("Boolean expression expected here", "", ast.E.position);
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E.position);
     ast.C.visit(this, null);
     return null;
   }

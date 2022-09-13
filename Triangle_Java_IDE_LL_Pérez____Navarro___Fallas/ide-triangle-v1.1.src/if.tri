@@ -1,0 +1,2 @@
+if x then dd() 
+else puteol() end

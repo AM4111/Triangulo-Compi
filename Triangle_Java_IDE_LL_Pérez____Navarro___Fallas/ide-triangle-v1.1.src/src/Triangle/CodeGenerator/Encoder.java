@@ -89,9 +89,16 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 
 public final class Encoder implements Visitor {
-
+  // Nuevos agregado - Parte 1
+  // TODO 
+    /*
+    aiuda TwT
+    >.<
+    LoopWhileDoCommmand -> No se sabe como funciona esto del encoder
+    */
 
   // Commands
   public Object visitAssignCommand(AssignCommand ast, Object o) {

@@ -80,6 +80,7 @@ import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 
 public class LayoutVisitor implements Visitor {
 
@@ -92,6 +93,10 @@ public class LayoutVisitor implements Visitor {
     this.fontMetrics = fontMetrics;
   }
 
+  // Nuevos agregado - Parte 1
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object obj) { // Se agrega el visit del comando LoopWhileDoCommand
+    return layoutBinary("LoopWhileDoCom.", ast.E, ast.C);
+  }
   // Commands
   public Object visitAssignCommand(AssignCommand ast, Object obj) {
     return layoutBinary("AssignCom.", ast.V, ast.E);

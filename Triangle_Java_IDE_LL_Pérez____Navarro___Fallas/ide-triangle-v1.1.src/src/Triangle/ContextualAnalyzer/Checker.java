@@ -86,9 +86,20 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import Triangle.AbstractSyntaxTrees.LoopWhileDoCommand;
 
 public final class Checker implements Visitor {
-
+    
+  // Nuevos agregados - Parte 1
+  public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){ // Se agrega el metodo del comando visitLoopWhileDoCommand
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError("Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+  
+  
   // Commands
 
   // Always returns null. Does not use the given object.

@@ -346,14 +346,46 @@ public class Parser {
                     case Token.DO: {
                         acceptIt();
                         Command cAST = parseCommand();
-                        accept(Token.WHILE);
-                        Expression eAST = parseExpression();
-                        accept(Token.END);
-                        finish(commandPos);
-                        commandAST = new LoopDoWhileCommand(cAST, eAST, commandPos);
+                        switch (currentToken.kind) {
+                            case Token.WHILE: {
+                                acceptIt();
+                                Expression eAST = parseExpression();
+                                accept(Token.END);
+                                finish(commandPos);
+                                commandAST = new LoopDoWhileCommand(cAST, eAST, commandPos);
+                            }
+                            break;
+                            case Token.UNTIL: {
+                                acceptIt();
+                                Expression eAST = parseExpression();
+                                accept(Token.END);
+                                finish(commandPos);
+                                commandAST = new LoopDoUntilCommand(cAST, eAST, commandPos);
+                            }
+                            break;
+                            default:
+                                syntacticError("\"%\" cannot start a command",
+                                        currentToken.spelling);
+                                break;
+                        }
                     }
                     break;
+                    case Token.UNTIL: {
+                        acceptIt();
+                        Expression eAST = parseExpression();
+                        accept(Token.DO);
+                        Command cAST = parseCommand();
+                        accept(Token.END);
+                        finish(commandPos);
+                        commandAST = new LoopUntilDoCommand(eAST, cAST, commandPos);
+                    }
+                    break;
+                    default:
+                        syntacticError("\"%\" cannot start a command",
+                                currentToken.spelling);
+                        break;
                 }
+                break;
             case Token.SEMICOLON:
             case Token.END:
             case Token.ELSE:

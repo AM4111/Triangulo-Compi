@@ -21,7 +21,8 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
-
+import Triangle.AbstractSyntaxTrees.LoopForFromToWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToUntilDoCommand;
 /**
  * Implements the Triangle Visitor interface, which is used to
  * visit an entire AST. 
@@ -84,6 +85,27 @@ public class TableVisitor implements Visitor {
        ast.I.visit(this, null);
        ast.E1.visit(this, null);
        ast.E2.visit(this, null);
+       ast.C.visit(this, null);
+      return(null);
+  }
+   
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de LoopForFromToWhileDoCommand
+   public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o) { 
+       ast.I.visit(this, null);
+       ast.E1.visit(this, null);
+       ast.E2.visit(this, null);
+       ast.E3.visit(this, null);
+       ast.C.visit(this, null);
+      return(null);
+  }
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de LoopForFromToUntilDoCommand
+   public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) { 
+       ast.I.visit(this, null);
+       ast.E1.visit(this, null);
+       ast.E2.visit(this, null);
+       ast.E3.visit(this, null);
        ast.C.visit(this, null);
       return(null);
   }

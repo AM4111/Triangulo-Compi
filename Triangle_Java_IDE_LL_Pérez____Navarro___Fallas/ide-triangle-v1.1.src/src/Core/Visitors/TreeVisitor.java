@@ -13,7 +13,8 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
-
+import Triangle.AbstractSyntaxTrees.LoopForFromToWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToUntilDoCommand;
 /**
  * Implements the Triangle Visitor interface, which is used to
  * visit an entire AST. 
@@ -66,6 +67,18 @@ public class TreeVisitor implements Visitor {
     // Crear el binario del LoopForFromToDoCommand
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object obj) {
         return(createQuaternary("Loop For From To Do Command", ast.I, ast.E1, ast.E2, ast.C));
+    }
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopForFromToWhileDoCommand
+    public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object obj) {
+        return(createQuinternary("Loop For From To While Do Command", ast.I, ast.E1, ast.E2, ast.E3, ast.C));
+    }
+    
+        // Autores: Max Lee y Paula Mariana Bustos
+    // Crear el binario del LoopForFromToUntilDoCommand
+    public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object obj) {
+        return(createQuinternary("Loop For From To Until Do Command", ast.I, ast.E1, ast.E2, ast.E3, ast.C));
     }
     
     // Commands  
@@ -444,5 +457,25 @@ public class TreeVisitor implements Visitor {
         
         return(t);             
     }
-    // </editor-fold>
+    
+    /**
+     * Creates a quaternary tree node.
+     * @param caption The tree's caption (text to be shown when the tree is drawn).
+     * @param child1 The first children node.
+     * @param child2 The second children node.
+     * @param child3 The third children node.
+     * @param child4 The fourth children node.
+     * @param child5 The fourth children node.
+     * @return The tree node.
+     */
+    public DefaultMutableTreeNode createQuinternary(String caption, AST child1, AST child2, AST child3, AST child4, AST child5) {
+        DefaultMutableTreeNode t = new DefaultMutableTreeNode(caption);
+        t.add((DefaultMutableTreeNode)child1.visit(this, null));
+        t.add((DefaultMutableTreeNode)child2.visit(this, null));
+        t.add((DefaultMutableTreeNode)child3.visit(this, null));
+        t.add((DefaultMutableTreeNode)child4.visit(this, null));
+        t.add((DefaultMutableTreeNode)child5.visit(this, null));
+        return(t);             
+    }
+
 }

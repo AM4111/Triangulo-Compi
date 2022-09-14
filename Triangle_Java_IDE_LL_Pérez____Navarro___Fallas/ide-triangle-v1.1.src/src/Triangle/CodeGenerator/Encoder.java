@@ -96,6 +96,8 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToUntilDoCommand;
 
 public final class Encoder implements Visitor {
   // Nuevos agregado - Parte x
@@ -1048,4 +1050,15 @@ public final class Encoder implements Visitor {
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

@@ -25,6 +25,8 @@ public interface Visitor {
   public abstract Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o);
   public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
   public abstract Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o);
+  public abstract Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o);
+  public abstract Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o);
     
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);

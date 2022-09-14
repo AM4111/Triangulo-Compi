@@ -59,6 +59,18 @@ public class LayoutVisitor implements Visitor {
   }
   
   // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopForFromToWhileDoCommand
+  public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object obj) {
+    return layoutQuinternary("LoopForFromToWhileDoComm.", ast.I, ast.E1, ast.E2,ast.E3, ast.C);
+  }
+  
+  // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el visit del comando LoopForFromToWhileDoCommand
+  public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object obj) {
+    return layoutQuinternary("LoopForFromToUntilDoComm.", ast.I, ast.E1, ast.E2,ast.E3, ast.C);
+  }
+  
+  // Autores: Max Lee y Paula Mariana Bustos
   // Se agrega el visit del comando LetInCommand
   public Object visitLetInCommand(LetInCommand ast, Object obj) {
     return layoutBinary("LetCom.", ast.D, ast.C);
@@ -416,6 +428,21 @@ public class LayoutVisitor implements Visitor {
     attachParent(dt, join(dt));
     return dt;
   }
+  
+    // Max Lee y Mariana Bustos
+    private DrawingTree layoutQuinternary (String name, AST child1, AST child2,
+                                        AST child3, AST child4, AST child5) {
+    DrawingTree dt = layoutCaption(name);
+    DrawingTree d1 = (DrawingTree) child1.visit(this, null);
+    DrawingTree d2 = (DrawingTree) child2.visit(this, null);
+    DrawingTree d3 = (DrawingTree) child3.visit(this, null);
+    DrawingTree d4 = (DrawingTree) child4.visit(this, null);
+    DrawingTree d5 = (DrawingTree) child5.visit(this, null);
+    dt.setChildren(new DrawingTree[] {d1, d2, d3, d4,d5});
+    attachParent(dt, join(dt));
+    return dt;
+  }
+
 
   private void attachParent(DrawingTree dt, int w) {
     int y = PARENT_SEP;

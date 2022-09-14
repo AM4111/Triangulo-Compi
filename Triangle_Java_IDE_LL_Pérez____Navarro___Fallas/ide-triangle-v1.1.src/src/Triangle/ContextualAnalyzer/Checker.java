@@ -24,6 +24,8 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToWhileDoCommand;
+import Triangle.AbstractSyntaxTrees.LoopForFromToUntilDoCommand;
 
 public final class Checker implements Visitor {
     
@@ -100,6 +102,66 @@ public final class Checker implements Visitor {
     if (! eType2.equals(StdEnvironment.booleanType))
       reporter.reportError(
               "Boolean expression expected here", "", ast.E2.position);
+    // Comando
+    ast.C.visit(this, null);
+    return null;
+  }
+  
+    // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo del comando visitLoopForFromToWhileDoCommand
+  public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o){
+    // Identificador
+    Declaration binding = (Declaration) ast.I.visit(this, null);
+    if (binding == null)
+      reportUndeclared(ast.I);
+    else
+      reporter.reportError("\"%\" is not a procedure identifier",
+                           ast.I.spelling, ast.I.position);
+    // Expresion 1
+    TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
+    if (! eType1.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E1.position);
+    // Expresion 2
+    TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
+    if (! eType2.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E2.position);
+    // Expresion 3
+    TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
+    if (! eType3.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E3.position);
+    // Comando
+    ast.C.visit(this, null);
+    return null;
+  }
+  
+    // Autores: Max Lee y Paula Mariana Bustos
+  // Se agrega el metodo del comando visitLoopForFromToUntilDoCommand
+  public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o){
+    // Identificador
+    Declaration binding = (Declaration) ast.I.visit(this, null);
+    if (binding == null)
+      reportUndeclared(ast.I);
+    else
+      reporter.reportError("\"%\" is not a procedure identifier",
+                           ast.I.spelling, ast.I.position);
+    // Expresion 1
+    TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
+    if (! eType1.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E1.position);
+    // Expresion 2
+    TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
+    if (! eType2.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E2.position);
+    // Expresion 3
+    TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
+    if (! eType3.equals(StdEnvironment.booleanType))
+      reporter.reportError(
+              "Boolean expression expected here", "", ast.E3.position);
     // Comando
     ast.C.visit(this, null);
     return null;

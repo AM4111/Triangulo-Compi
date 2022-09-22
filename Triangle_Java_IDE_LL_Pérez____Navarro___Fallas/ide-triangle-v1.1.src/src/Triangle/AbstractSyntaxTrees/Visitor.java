@@ -37,10 +37,10 @@ public interface Visitor {
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
 
-  /* CAMBIOS NUEVOS
-      Joshua:
-      -visitRestOfIfCommand
-      -visitBarCommand
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+   *  -visitRestOfIfCommand
+   *  -visitBarCommand
    */
   public abstract Object visitRestOfIfCommand(RestOfIf ast, Object o);
   public abstract Object visitBarCommand(BarCommand ast, Object o);
@@ -68,6 +68,15 @@ public interface Visitor {
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
+
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+   *  -VarInitDeclaration
+   *  -VarLocalDeclaration
+   */
+  public abstract Object visitVarInitDeclaration(VarInitDeclaration ast, Object o);
+
+  public abstract Object visitLocalDeclaration(LocalDeclaration ast, Object o);
 
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);

@@ -218,6 +218,22 @@ public class TreeVisitor implements Visitor {
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
         return(createBinary("Variable Declaration", ast.I, ast.T));
     }
+
+    /* CAMBIOS NUEVOS Parte 1
+     * Autores: Joshua Arcia
+        -VisitVarInitDeclaration
+        -VisitLocalDeclaration
+     */
+
+    @Override
+    public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+        return (createBinary("Variable Init Declaration",ast.I,ast.E));
+    }
+
+    @Override
+    public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        return (createBinary("Local Declaration",ast.D1,ast.D2));
+    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">

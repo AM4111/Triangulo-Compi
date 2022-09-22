@@ -262,6 +262,7 @@ public class Parser {
             break;
             // Autores: Max Lee y Paula Mariana Bustos 
             // Crear el caso "loop"
+
             case Token.LOOP:
                 acceptIt();
                 switch (currentToken.kind) {
@@ -676,6 +677,8 @@ public class Parser {
 // DECLARATIONS
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+    /*
     Declaration parseDeclaration() throws SyntaxError {
         Declaration declarationAST = null; // in case there's a syntactic error
 
@@ -689,6 +692,33 @@ public class Parser {
             declarationAST = new SequentialDeclaration(declarationAST, d2AST,
                     declarationPos);
         }
+        return declarationAST;
+    }
+    */
+
+    /* CAMBIOS NUEVOS Parte 1
+     * Autores: Joshua Arcia
+     * -Parse compound declaration
+     * -Local Declaration
+     * -Parse Declaration
+     * -Parse Single declaration
+    */
+    Declaration parseDeclaration() throws SyntaxError {
+        Declaration declarationAST = null; // in case there's a syntactic error
+
+        SourcePosition declarationPos = new SourcePosition();
+        start(declarationPos);
+
+       Declaration compoundDeclarationAST = parseCompoundDeclaration();
+
+        while (currentToken.kind == Token.SEMICOLON) {
+            acceptIt();
+            Declaration d2AST = parseDeclaration();
+            finish(declarationPos);
+            declarationAST = new SequentialDeclaration(compoundDeclarationAST, d2AST,
+                    declarationPos);
+        }
+
         return declarationAST;
     }
 
@@ -713,10 +743,35 @@ public class Parser {
             case Token.VAR: {
                 acceptIt();
                 Identifier iAST = parseIdentifier();
-                accept(Token.COLON);
-                TypeDenoter tAST = parseTypeDenoter();
-                finish(declarationPos);
-                declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+
+                switch (currentToken.kind){
+
+                    case Token.COLON:{
+                        acceptIt();
+                        TypeDenoter tAST;
+                        tAST = parseTypeDenoter();
+                        finish(declarationPos);
+                        declarationAST = new VarDeclaration(iAST,tAST,declarationPos);
+                    }
+                    break;
+
+                    case Token.INIT:{
+                        acceptIt();
+                        accept(Token.INIT);
+                        Expression eAST;
+                        eAST = parseExpression();
+                        finish(declarationPos);
+                        declarationAST = new VarInitDeclaration(iAST,eAST,declarationPos);
+                    }
+                    break;
+
+                    default:
+                        syntacticError("\"%\" cannot start a declaration",
+                                currentToken.spelling);
+                        break;
+                }
+
+
             }
             break;
 
@@ -727,7 +782,10 @@ public class Parser {
                 FormalParameterSequence fpsAST = parseFormalParameterSequence();
                 accept(Token.RPAREN);
                 accept(Token.IS);
-                Command cAST = parseSingleCommand();
+                //Command cAST = parseSingleCommand(); Eliminación de ParseSinglecommand
+                //Cambios nuevos
+                Command cAST = parseCommand(); //Se añade command
+                accept(Token.END); //Se añade END
                 finish(declarationPos);
                 declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
             }
@@ -768,11 +826,50 @@ public class Parser {
         return declarationAST;
     }
 
+    Declaration parseCompoundDeclaration() throws SyntaxError{
+        Declaration compoundDeclarationAST = null; // in case there's a syntactic error
+
+        SourcePosition declarationPos = new SourcePosition();
+        start(declarationPos);
+
+        switch(currentToken.kind){
+
+            case Token.REC:
+            {
+                acceptIt();
+                //Procfuncs pfAST;
+                //pfAST = parseProcfuncs();
+                accept(Token.END);
+                finish(declarationPos);
+                //compoundDeclarationAST = new ProcFuncDeclaration();
+            }
+            break;
+
+
+            case Token.LOCAL:
+            {
+                acceptIt();
+                Declaration dAST;
+                dAST = parseDeclaration();
+                accept(Token.IN);
+                Declaration d2AST;
+                d2AST = parseDeclaration();
+                accept(Token.END);
+                finish(declarationPos);
+                compoundDeclarationAST = new LocalDeclaration(dAST,d2AST,declarationPos);
+            }
+            break;
+
+            default:
+                compoundDeclarationAST = parseSingleDeclaration();
+                break;
+        }
+
+        return compoundDeclarationAST;
+    }
+
     /* TODO
-      - Añadir compound declaration
       - Añadir "rec" Proc-Funcs "end"
-      - Añadir "local" Declaration "in" Declaration "end"
-      - Añadir a single declaration "var" identifier "init" Expression (Declaracion de variable inicializada)
       - Modicar Proc en single declaration
      */
 ///////////////////////////////////////////////////////////////////////////////

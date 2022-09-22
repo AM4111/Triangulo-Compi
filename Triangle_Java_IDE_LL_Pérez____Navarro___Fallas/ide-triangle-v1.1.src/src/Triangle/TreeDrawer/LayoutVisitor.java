@@ -210,6 +210,21 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
 
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+   -VarInitDeclaration
+   -LocalDeclaration
+    */
+  @Override
+  public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+    return layoutBinary("VarInitDecl.",ast.I,ast.E);
+  }
+
+  @Override
+  public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+    return layoutBinary("LocalVarDecl.",ast.D1,ast.D2);
+  }
+
 
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {

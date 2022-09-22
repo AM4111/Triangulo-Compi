@@ -455,6 +455,22 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+   *  -VarInitDeclaration
+   *  -VarLocalDeclaration
+   */
+
+  @Override
+  public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+    return null;
+  }
+
+  @Override
+  public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+    return null;
+  }
+
   // Array Aggregates
 
   // Returns the TypeDenoter for the Array Aggregate. Does not use the

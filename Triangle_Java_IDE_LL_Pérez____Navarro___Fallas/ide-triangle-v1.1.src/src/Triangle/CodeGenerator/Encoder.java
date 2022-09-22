@@ -167,8 +167,8 @@ public final class Encoder implements Visitor {
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
     return null;
   }
-  /* CAMBIOS NUEVOS
-      Joshua:
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
       -visitRestOfIfCommand
       -Modificación de if para que sea con rest of if
       -visitBarCommand
@@ -378,6 +378,22 @@ public final class Encoder implements Visitor {
     ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
     return new Integer(extraSize);
+  }
+
+  /* CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+      -VisitVarInitDeclaration
+      -VisitLocalDeclaration
+   */
+
+  @Override
+  public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+    return null;
+  }
+
+  @Override
+  public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+    return null;
   }
 
 

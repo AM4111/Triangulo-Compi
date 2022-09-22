@@ -347,8 +347,24 @@ public class TableVisitor implements Visitor {
       ast.T.visit(this, null);
       return(null);
   }
-  
-  // </editor-fold>
+
+  /*
+   * CAMBIOS NUEVOS Parte 1
+   * Autores: Joshua Arcia
+    -visitVarInitDeclaration
+    -visitLocalDeclaration
+   */
+    @Override
+    public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        return null;
+    }
+
+    // </editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
   // Array Aggregates

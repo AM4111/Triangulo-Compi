@@ -303,7 +303,7 @@ public class Parser {
                             break;
                             // Caso predetermidado por si no coincide con algun caso anterior del "loop do"
                             default:
-                                syntacticError("\"%\" cannot start a command",
+                                syntacticError("\"%\" cannot start a loop do command",
                                         currentToken.spelling);
                                 break;
                         }
@@ -364,7 +364,7 @@ public class Parser {
                             break;
                             default:
                                 // Caso predetermidado por si no coincide con algun caso anterior del "loop for ident from exp1 to exp2"
-                                syntacticError("\"%\" cannot start a command",
+                                syntacticError("\"%\" cannot start a loop for command",
                                         currentToken.spelling);
                                 break;
                         }

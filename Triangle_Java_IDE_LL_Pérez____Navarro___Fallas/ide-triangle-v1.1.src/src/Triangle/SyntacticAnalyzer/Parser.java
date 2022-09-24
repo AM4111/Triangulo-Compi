@@ -277,6 +277,7 @@ public class Parser {
                         commandAST = new LoopWhileDoCommand(eAST, cAST, commandPos);
                     }
                     break;
+
                     // Crear el caso del "loop do comm"
                     case Token.DO: {
                         acceptIt();
@@ -308,6 +309,7 @@ public class Parser {
                         }
                     }
                     break;
+
                     // Crear el caso del "loop until exp do comm end"
                     case Token.UNTIL: {
                         acceptIt();
@@ -319,6 +321,7 @@ public class Parser {
                         commandAST = new LoopUntilDoCommand(eAST, cAST, commandPos);
                     }
                     break;
+
                     // Crear el caso del "loop for ident from exp1 to exp2"
                     case Token.FOR: {
                         acceptIt();
@@ -334,7 +337,7 @@ public class Parser {
                                 Command cAST = parseCommand();
                                 accept(Token.END);
                                 finish(commandPos);
-                                //commandAST = new LoopForFromToDoCommand(iAST, eAST1, eAST2, cAST, commandPos)
+                                commandAST = new LoopForFromToDoCommand(iAST, eAST1, eAST2, cAST, commandPos);
                             }
                             break;
                             // Crear el caso del "loop for ident from exp1 to exp2 while exp3 do comm end"
@@ -345,7 +348,7 @@ public class Parser {
                                 Command cAST = parseCommand();
                                 accept(Token.END);
                                 finish(commandPos);
-                                //commandAST = new LoopForFromToWhileDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos)
+                                commandAST = new LoopForFromToWhileDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos);
                             }
                             break;
                             // Crear el caso del "loop for ident from exp1 to exp2 until exp3 do comm end"
@@ -356,7 +359,7 @@ public class Parser {
                                 Command cAST = parseCommand();
                                 accept(Token.END);
                                 finish(commandPos);
-                                //commandAST = new LoopForFromToUntilDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos)
+                                commandAST = new LoopForFromToUntilDoCommand(iAST, eAST1, eAST2, eAST3, cAST, commandPos);
                             }
                             break;
                             default:
@@ -367,6 +370,7 @@ public class Parser {
                         }
                     }
                     break;
+
                     // Caso predetermidado por si no coincide con algun caso anterior del "loop"
                     default:
                         syntacticError("\"%\" cannot start a command",

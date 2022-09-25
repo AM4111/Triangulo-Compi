@@ -55,4 +55,8 @@ public class SourceFile {
   int getCurrentLine() {
     return currentLine;
   }
+
+    public boolean substring(int i, int i0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

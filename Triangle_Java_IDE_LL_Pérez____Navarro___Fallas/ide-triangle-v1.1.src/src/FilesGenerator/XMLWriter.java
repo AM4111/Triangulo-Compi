@@ -6,6 +6,7 @@
 package FilesGenerator;
 
 
+import Triangle.AbstractSyntaxTrees.Program;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ public class XMLWriter {
             //HTML header
             fileWriter.write("<?xml version=\"1.0\" standalone=\"yes\"?>\n");
 
-            WriterVisitor layout = new WriterVisitor(fileWriter);
+            XMLWriterVisitor layout = new XMLWriterVisitor(fileWriter);
             ast.visit(layout, null);
 
             fileWriter.close();

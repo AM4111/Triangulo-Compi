@@ -353,6 +353,7 @@ public class TableVisitor implements Visitor {
    * Autores: Joshua Arcia
     -visitVarInitDeclaration
     -visitLocalDeclaration
+    -visitProcFuncsDeclaration
    */
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
@@ -361,6 +362,11 @@ public class TableVisitor implements Visitor {
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
         return null;
     }
 

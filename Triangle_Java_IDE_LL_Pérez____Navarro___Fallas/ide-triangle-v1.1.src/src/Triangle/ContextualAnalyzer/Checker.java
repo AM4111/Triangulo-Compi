@@ -459,6 +459,7 @@ public final class Checker implements Visitor {
    * Autores: Joshua Arcia
    *  -VarInitDeclaration
    *  -VarLocalDeclaration
+   *  -ProcFuncDeclaration
    */
 
   @Override
@@ -471,7 +472,12 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  // Array Aggregates
+    @Override
+    public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
+        return null;
+    }
+
+    // Array Aggregates
 
   // Returns the TypeDenoter for the Array Aggregate. Does not use the
   // given object.

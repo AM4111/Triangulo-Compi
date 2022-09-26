@@ -1,0 +1,5 @@
+!Testing for proc Command end
+let
+ proc x () ~ geteol(); puteol() end
+in geteol()
+end

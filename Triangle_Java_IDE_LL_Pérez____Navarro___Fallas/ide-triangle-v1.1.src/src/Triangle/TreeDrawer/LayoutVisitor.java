@@ -214,6 +214,7 @@ public class LayoutVisitor implements Visitor {
    * Autores: Joshua Arcia
    -VarInitDeclaration
    -LocalDeclaration
+   -ProcFuncsDeclaration
     */
   @Override
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
@@ -223,6 +224,28 @@ public class LayoutVisitor implements Visitor {
   @Override
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
     return layoutBinary("LocalVarDecl.",ast.D1,ast.D2);
+  }
+
+  @Override
+  public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
+    if (ast.PF != null)
+    {
+      if (ast.FD != null){
+        return layoutBinary("ProcfuncsFD",ast.FD,ast.PF);
+      }
+      else {
+        return layoutBinary("ProcfuncsPD",ast.PD,ast.PF);
+      }
+    }
+    else
+    {
+      if (ast.FD != null){
+        return layoutUnary("ProcfuncsFD",ast.FD);
+      }
+      else {
+        return layoutUnary("ProcfuncsPD",ast.PD);
+      }
+    }
   }
 
 

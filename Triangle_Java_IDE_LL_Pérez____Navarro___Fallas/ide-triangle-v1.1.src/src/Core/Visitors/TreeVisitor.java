@@ -223,6 +223,7 @@ public class TreeVisitor implements Visitor {
      * Autores: Joshua Arcia
         -VisitVarInitDeclaration
         -VisitLocalDeclaration
+        -VisitProcFuncsDeclaration
      */
 
     @Override
@@ -233,6 +234,28 @@ public class TreeVisitor implements Visitor {
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
         return (createBinary("Local Declaration",ast.D1,ast.D2));
+    }
+
+    @Override
+    public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
+        if (ast.PF != null)
+        {
+            if (ast.FD != null){
+                return (createBinary("Procfunc Func Declaration",ast.FD,ast.PF));
+            }
+            else {
+                return (createBinary("Procfuncs Proc Declaration",ast.PD,ast.PF));
+            }
+        }
+        else
+        {
+            if (ast.FD != null){
+                return (createUnary("Procfuncs Func Declaration",ast.FD));
+            }
+            else {
+                return (createUnary("Procfuncs Proc Declaration",ast.PD));
+            }
+        }
     }
     // </editor-fold>
     

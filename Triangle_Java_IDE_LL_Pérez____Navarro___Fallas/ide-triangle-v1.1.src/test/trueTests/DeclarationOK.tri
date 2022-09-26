@@ -1,0 +1,5 @@
+let
+ var name: Char;
+ var x: Int
+in geteol()
+end

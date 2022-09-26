@@ -384,6 +384,8 @@ public final class Encoder implements Visitor {
    * Autores: Joshua Arcia
       -VisitVarInitDeclaration
       -VisitLocalDeclaration
+      -VisitProcFuncsDeclaration
+      *
    */
 
   @Override
@@ -393,6 +395,11 @@ public final class Encoder implements Visitor {
 
   @Override
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+    return null;
+  }
+
+  @Override
+  public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
     return null;
   }
 

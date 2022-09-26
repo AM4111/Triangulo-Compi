@@ -73,10 +73,13 @@ public interface Visitor {
    * Autores: Joshua Arcia
    *  -VarInitDeclaration
    *  -VarLocalDeclaration
+   *  -Proc Funcs
    */
   public abstract Object visitVarInitDeclaration(VarInitDeclaration ast, Object o);
 
   public abstract Object visitLocalDeclaration(LocalDeclaration ast, Object o);
+
+  public abstract Object visitProcFuncsDeclaration(ProcFuncDeclaration ast,Object o);
 
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);

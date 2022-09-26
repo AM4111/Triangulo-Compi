@@ -1,0 +1,6 @@
+!Not a declaration after the the ";"
+let
+ var name: Char;
+ geteol()
+in geteol()
+end

@@ -1,0 +1,5 @@
+let
+ var name: Char;
+ local var x: int in var s: Char end
+in geteol()
+end

@@ -1,3 +1,4 @@
 if x then dd() 
 | c then x()
+| f then xx()
 else puteol() end

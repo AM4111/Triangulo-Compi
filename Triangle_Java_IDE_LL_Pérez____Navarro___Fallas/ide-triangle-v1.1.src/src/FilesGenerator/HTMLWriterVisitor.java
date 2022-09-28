@@ -106,24 +106,28 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitCallCommand(CallCommand ast, Object obj) {
-        writeLineHTML("<CallCommand>");
         ast.I.visit(this, null);
         ast.APS.visit(this, null);
-        writeLineHTML("</CallCommand>");
         return null;
     }
 
     public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
-        writeLineHTML("<EmptyCommand/>");
+        writeLineHTML("<font color='#00b300'>! Test of nil, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>nil </b><font style='paddingleft:1em'>");
         return null;
     }
 
     public Object visitIfCommand(IfCommand ast, Object obj) {
-        writeLineHTML("<IfCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop until command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>if </b><font style='paddingleft:1em'>");
         ast.E.visit(this, null);
+        writeLineHTML("<b>then </b><font style='paddingleft:1em'>");
         ast.C1.visit(this, null);
+        writeLineHTML("<b>| </b><font style='paddingleft:1em'>");
         ast.ROI1.visit(this, null);
-        writeLineHTML("</IfCommand>");
+        writeLineHTML("<b>end </b>");
         return null;
     }
 
@@ -136,10 +140,13 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
-        writeLineHTML("<SequentialCommand>");
-        ast.C1.visit(this, null);
-        ast.C2.visit(this, null);
-        writeLineHTML("</SequentialCommand>");
+        if (ast.C1 != null) {
+            ast.C1.visit(this, null);
+            writeLineHTML("<b>; </b><font style='paddingleft:1em'>");
+        }
+        if (ast.C2 != null) {
+            ast.C2.visit(this, null);
+        }
         return null;
     }
 
@@ -228,9 +235,7 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitVnameExpression(VnameExpression ast, Object obj) {
-        writeLineHTML("<VnameExpression>");
         ast.V.visit(this, null);
-        writeLineHTML("</VnameExpression>");
         return null;
     }
 
@@ -264,19 +269,22 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
-        writeLineHTML("<ProcDeclaration>");
         ast.I.visit(this, null);
+        writeLineHTML("<b>~ </b><font style='paddingleft:1em'>");
         ast.FPS.visit(this, null);
         ast.C.visit(this, null);
-        writeLineHTML("</ProcDeclaration>");
+        writeLineHTML("<b>end </b><font style='paddingleft:1em'>");
         return null;
     }
 
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
-        writeLineHTML("<SequentialDeclaration>");
-        ast.D1.visit(this, null);
-        ast.D2.visit(this, null);
-        writeLineHTML("</SequentialDeclaration>");
+        if (ast.D1 != null) {
+            ast.D1.visit(this, null);
+            writeLineHTML("<b>; </b><font style='paddingleft:1em'>");
+        }
+        if (ast.D2 != null) {
+            ast.D2.visit(this, null);
+        }
         return null;
     }
 
@@ -298,10 +306,9 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
-        writeLineHTML("<VarDeclaration>");
+        writeLineHTML("<b>var </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
         ast.T.visit(this, null);
-        writeLineHTML("</VarDeclaration>");
         return null;
     }
 
@@ -422,8 +429,9 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Se elimina la etiqueta
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
-        writeLineHTML("<EmptyActualParameterSequence/>");
+        //writeLineHTML("<EmptyActualParameterSequence/>");
         return null;
     }
 
@@ -513,8 +521,9 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Se obtiene el valor de la expresion
     public Object visitIdentifier(Identifier ast, Object obj) {
-        writeLineHTML("<Identifier value=\"" + ast.spelling + "\"/>");
+        writeLineHTML(ast.spelling + " </font>");
         return null;
     }
 
@@ -538,9 +547,8 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitSimpleVname(SimpleVname ast, Object obj) {
-        writeLineHTML("<SimpleVname>");
+        writeLineHTML("<font color='#0000cd'>");
         ast.I.visit(this, null);
-        writeLineHTML("</SimpleVname>");
         return null;
     }
 
@@ -554,9 +562,7 @@ public class HTMLWriterVisitor implements Visitor {
 
     // Programs
     public Object visitProgram(Program ast, Object obj) {
-        writeLineHTML("<Program>");
         ast.C.visit(this, null);
-        writeLineHTML("</Program>");
         return null;
     }
 
@@ -587,120 +593,179 @@ public class HTMLWriterVisitor implements Visitor {
     // Se agrega el metodo visitor de LetInCommand
     @Override
     public Object visitLetInCommand(LetInCommand ast, Object o) {
-        writeLineHTML("<LetInCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of let in command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>let </b><font style='paddingleft:1em'>");
         ast.D.visit(this, null);
+        writeLineHTML("<b>in </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
-        writeLineHTML("</LetInCommand>");
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopWhileDoCommand
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) {
-        writeLineHTML("<font color='#00b300'>! Test of loop while command, it runs correctly. </font>");
+        writeLineHTML("<font color='#00b300'>! Test of loop while do command, it runs correctly. </font>");
         writeLineHTML("<br><br>");
-        writeLineHTML("<b>loop while</b><font style='paddingleft:1em'>");        
-        writeLineHTML("<font color='#0000cd'> " + ast.E.visit(this, null) + " </font>");
-        writeLineHTML("<b> do </b><font style='paddingleft:1em'>");
-        writeLineHTML("<font style='paddingleft:1em'> " + ast.C.visit(this, null) + " </font>");
-        writeLineHTML("<b> end <b>");
+        writeLineHTML("<b>loop while </b><font style='paddingleft:1em'>");
+        ast.E.visit(this, null);
+        writeLineHTML("<b>do </b><font style='paddingleft:1em'>");
+        ast.C.visit(this, null);
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopDoWhileCommand
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o) {
-        writeLineHTML("<LoopDoWhileCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop do while command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
+        writeLineHTML("<b>while </b><font style='paddingleft:1em'>");
         ast.E.visit(this, null);
-        writeLineHTML("</LoopDoWhileCommand>");
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopUntilDoCommand
     public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o) {
-        writeLineHTML("<LoopUntilDoCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop until do command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop until </b><font style='paddingleft:1em'>");
         ast.E.visit(this, null);
+        writeLineHTML("<b>do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
-        writeLineHTML("</LoopUntilDoCommand>");
+        writeLineHTML("<b>end <b>");
         return (null);
     }
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopDoUntilCommand
 
     public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        writeLineHTML("<LoopDoUntilCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop do until command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
+        writeLineHTML("<b>until </b><font style='paddingleft:1em'>");
         ast.E.visit(this, null);
-        writeLineHTML("</LoopDoUntilCommand>");
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopForFromToDoCommand
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) {
-        writeLineHTML("<LoopForFromToDoCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop for from to do command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop for </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
+        writeLineHTML("<b>from </b><font style='paddingleft:1em'>");
         ast.E1.visit(this, null);
+        writeLineHTML("<b>to </b><font style='paddingleft:1em'>");
         ast.E2.visit(this, null);
+        writeLineHTML("<b>do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
-        writeLineHTML("</LoopForFromToDoCommand>");
-
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopForFromToWhileDoCommand
     public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o) {
-        writeLineHTML("<LoopForFromToWhileDoCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop for from to while do command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop for </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
+        writeLineHTML("<b>from </b><font style='paddingleft:1em'>");
         ast.E1.visit(this, null);
+        writeLineHTML("<b>to </b><font style='paddingleft:1em'>");
         ast.E2.visit(this, null);
+        writeLineHTML("<b>while </b><font style='paddingleft:1em'>");
         ast.E3.visit(this, null);
+        writeLineHTML("<b>do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
-        writeLineHTML("</LoopForFromToWhileDoCommand>");
-
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopForFromToUntilDoCommand
     public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) {
-        writeLineHTML("<LoopForFromToUntilDoCommand>");
+        writeLineHTML("<font color='#00b300'>! Test of loop for from to until do command, it runs correctly. </font>");
+        writeLineHTML("<br><br>");
+        writeLineHTML("<b>loop for </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
+        writeLineHTML("<b>from </b><font style='paddingleft:1em'>");
         ast.E1.visit(this, null);
+        writeLineHTML("<b>to </b><font style='paddingleft:1em'>");
         ast.E2.visit(this, null);
+        writeLineHTML("<b>until </b><font style='paddingleft:1em'>");
         ast.E3.visit(this, null);
+        writeLineHTML("<b>do </b><font style='paddingleft:1em'>");
         ast.C.visit(this, null);
-        writeLineHTML("</LoopForFromToUntilDoCommand>");
+        writeLineHTML("<b>end <b>");
         return (null);
     }
 
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (ast.BC1 != null) {
+            ast.BC1.visit(this, null);
+            writeLineHTML("<b>else </b><font style='paddingleft:1em'>");
+        }
+        ast.C1.visit(this, null);
+        return (null);
     }
 
     @Override
     public Object visitBarCommand(BarCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.E1.visit(this, null);
+        writeLineHTML("<b>then </b><font style='paddingleft:1em'>");
+        ast.C1.visit(this, null);
+        if (ast.BC1 != null) {
+            writeLineHTML("<b>| </b><font style='paddingleft:1em'>");
+            ast.BC1.visit(this, null);
+        }
+        return (null);
     }
 
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineHTML("<b>var </b><font style='paddingleft:1em'>");
+        ast.I.visit(this, null);
+        writeLineHTML("<b>init </b><font style='paddingleft:1em'>");
+        ast.E.visit(this, null);
+        return (null);
     }
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineHTML("<b>local </b><font style='paddingleft:1em'>");
+        ast.D1.visit(this, null);
+        writeLineHTML("<b>in </b><font style='paddingleft:1em'>");
+        ast.D2.visit(this, null);
+        writeLineHTML("<b>end </b><font style='paddingleft:1em'>");
+        return (null);
     }
 
     @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (ast.PD != null) {
+            ast.PD.visit(this, null);
+            if (ast.PF != null) {
+                ast.PF.visit(this, null);
+            }
+        }
+        if (ast.PD != null) {
+            ast.PF.visit(this, null);
+            if (ast.PF != null) {
+                ast.PF.visit(this, null);
+            }
+        }
+        return (null);
     }
-
 
 }

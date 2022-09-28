@@ -200,8 +200,12 @@ public class XMLWriterVisitor implements Visitor {
 
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         writeLineXML("<SequentialDeclaration>");
-        ast.D1.visit(this, null);
-        ast.D2.visit(this, null);
+        if (ast.D1 != null){
+            ast.D1.visit(this, null);
+        }
+        if (ast.D2 != null){
+            ast.D2.visit(this, null);
+        }
         writeLineXML("</SequentialDeclaration>");
         return null;
     }
@@ -604,10 +608,10 @@ public class XMLWriterVisitor implements Visitor {
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
         writeLineXML("<RestIfCommand>");
-        ast.C1.visit(this, null);
         if (ast.BC1 != null){
             ast.BC1.visit(this, null);
         }
+        ast.C1.visit(this, null);
         writeLineXML("</RestIfCommand>");
         return (null);
     }

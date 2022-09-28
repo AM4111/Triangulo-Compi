@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<LetInCommand>
+<SequentialDeclaration>
+<VarDeclaration>
+<Identifier value="name"/>
+<SimpleTypeDenoter>
+<Identifier value="Char"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<LocalDeclaration>
+<VarDeclaration>
+<Identifier value="x"/>
+<SimpleTypeDenoter>
+<Identifier value="int"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<VarDeclaration>
+<Identifier value="s"/>
+<SimpleTypeDenoter>
+<Identifier value="Char"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+</LocalDeclaration>
+</SequentialDeclaration>
+<CallCommand>
+<Identifier value="geteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</LetInCommand>
+</Program>

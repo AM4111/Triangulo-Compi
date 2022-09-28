@@ -11,10 +11,6 @@
 <EmptyActualParameterSequence/>
 </CallCommand>
 <RestIfCommand>
-<CallCommand>
-<Identifier value="puteol"/>
-<EmptyActualParameterSequence/>
-</CallCommand>
 <BarCommand>
 <VnameExpression>
 <SimpleVname>
@@ -25,7 +21,22 @@
 <Identifier value="x"/>
 <EmptyActualParameterSequence/>
 </CallCommand>
+<BarCommand>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="f"/>
+</SimpleVname>
+</VnameExpression>
+<CallCommand>
+<Identifier value="xx"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
 </BarCommand>
+</BarCommand>
+<CallCommand>
+<Identifier value="puteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
 </RestIfCommand>
 </IfCommand>
 </Program>

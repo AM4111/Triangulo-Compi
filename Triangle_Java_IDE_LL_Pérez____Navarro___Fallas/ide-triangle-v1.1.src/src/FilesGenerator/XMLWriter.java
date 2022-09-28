@@ -27,7 +27,7 @@ public class XMLWriter {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
 
-            //HTML header
+            //XML header
             fileWriter.write("<?xml version=\"1.0\" standalone=\"yes\"?>\n");
 
             XMLWriterVisitor layout = new XMLWriterVisitor(fileWriter);

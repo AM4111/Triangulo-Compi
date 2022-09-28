@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<LoopWhileDoCommand>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</VnameExpression>
+<CallCommand>
+<Identifier value="geteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</LoopWhileDoCommand>
+</Program>

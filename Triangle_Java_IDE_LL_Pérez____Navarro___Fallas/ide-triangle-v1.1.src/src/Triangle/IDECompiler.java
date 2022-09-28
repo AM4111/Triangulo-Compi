@@ -4,6 +4,7 @@
  */
 package Triangle;
 
+import FilesGenerator.HTMLWriter;
 import FilesGenerator.XMLWriter;
 import Triangle.SyntacticAnalyzer.SourceFile;
 import Triangle.SyntacticAnalyzer.Scanner;
@@ -62,16 +63,20 @@ public class IDECompiler {
                 }
             }
         }
-        String xmlSourceName = sourceName.substring(0, sourceName.length() -3);
+        String fileSourceName = sourceName.substring(0, sourceName.length() -3);
         if (success) {
             System.out.println("Compilation was successful.");
-            XMLWriter xml = new XMLWriter(xmlSourceName + "xml");
+            XMLWriter xml = new XMLWriter(fileSourceName + "xml");
             xml.write(getAST());
             System.out.println("XML file generated successfully");
         } else {
             System.out.println("Compilation was unsuccessful.");
         }
 
+        HTMLWriter html = new HTMLWriter(fileSourceName + "html");
+        html.write(getAST());
+        System.out.println("HTML file generated successfully");
+        
         return (success);
     }
 

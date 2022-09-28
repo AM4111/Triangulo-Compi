@@ -5,10 +5,35 @@
  */
 package FilesGenerator;
 
+import Triangle.AbstractSyntaxTrees.Program;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  *
  * @author maxle
  */
 public class HTMLWriter {
-    
+    private String fileName;
+
+    public HTMLWriter(String fileName) {
+        this.fileName = fileName;
+    }
+
+    // Draw the AST representing a complete program.
+    public void write(Program ast) {
+        // Prepare the file to write
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+
+            HTMLWriterVisitor layout = new HTMLWriterVisitor(fileWriter);
+            ast.visit(layout, null);
+
+            fileWriter.close();
+
+        } catch (IOException e) {
+            System.err.println("Error while creating file for print the AST");
+            e.printStackTrace();
+        }
+    }
 }

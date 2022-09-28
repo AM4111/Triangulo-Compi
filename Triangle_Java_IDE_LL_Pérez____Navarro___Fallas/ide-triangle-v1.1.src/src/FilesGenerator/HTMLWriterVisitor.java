@@ -597,18 +597,13 @@ public class HTMLWriterVisitor implements Visitor {
     // Autores: Max Lee y Paula Mariana Bustos
     // Se agrega el metodo visitor de LoopWhileDoCommand
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) {
-        System.out.println(ast.C.visit(this, null));
-        writeLineHTML("<p style=\"font-family: 'DejaVu Sans', monospace;\">");
         writeLineHTML("<font color='#00b300'>! Test of loop while command, it runs correctly. </font>");
         writeLineHTML("<br><br>");
-        writeLineHTML("<b>loop while</b><font style='paddingleft:1em'>");
+        writeLineHTML("<b>loop while</b><font style='paddingleft:1em'>");        
         writeLineHTML("<font color='#0000cd'> " + ast.E.visit(this, null) + " </font>");
         writeLineHTML("<b> do </b><font style='paddingleft:1em'>");
-        writeLineHTML("<font color='#0000cd'> " + ast.C.visit(this, null) + " </font>");
+        writeLineHTML("<font style='paddingleft:1em'> " + ast.C.visit(this, null) + " </font>");
         writeLineHTML("<b> end <b>");
-        writeLineHTML("</p>");
-        ast.E.visit(this, null);
-        ast.C.visit(this, null);
         return (null);
     }
 

@@ -26,8 +26,14 @@ public class HTMLWriter {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
 
+            //HTML header
+            fileWriter.write("<p style=\"font-family: 'DejaVu Sans', monospace;\">");
+            
             HTMLWriterVisitor layout = new HTMLWriterVisitor(fileWriter);
             ast.visit(layout, null);
+            
+            //HTML end
+            fileWriter.write("</p>");
 
             fileWriter.close();
 

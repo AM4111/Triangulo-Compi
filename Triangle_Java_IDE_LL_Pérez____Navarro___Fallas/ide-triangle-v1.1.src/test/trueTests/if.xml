@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<IfCommand>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</VnameExpression>
+<CallCommand>
+<Identifier value="dd"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+<RestIfCommand>
+<CallCommand>
+<Identifier value="puteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+<BarCommand>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="c"/>
+</SimpleVname>
+</VnameExpression>
+<CallCommand>
+<Identifier value="x"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</BarCommand>
+</RestIfCommand>
+</IfCommand>
+</Program>

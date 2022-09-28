@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<LetInCommand>
+<ProcDeclaration>
+<Identifier value="x"/>
+<EmptyFormalParameterSequence/>
+<SequentialCommand>
+<CallCommand>
+<Identifier value="geteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+<CallCommand>
+<Identifier value="puteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</SequentialCommand>
+</ProcDeclaration>
+<CallCommand>
+<Identifier value="geteol"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</LetInCommand>
+</Program>

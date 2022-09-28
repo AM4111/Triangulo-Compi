@@ -603,27 +603,62 @@ public class XMLWriterVisitor implements Visitor {
 
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineXML("<RestIfCommand>");
+        ast.C1.visit(this, null);
+        if (ast.BC1 != null){
+            ast.BC1.visit(this, null);
+        }
+        writeLineXML("</RestIfCommand>");
+        return (null);
     }
 
     @Override
     public Object visitBarCommand(BarCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineXML("<BarCommand>");
+        ast.E1.visit(this, null);
+        ast.C1.visit(this, null);
+        if (ast.BC1 != null){
+            ast.BC1.visit(this, null);
+        }
+        writeLineXML("</BarCommand>");
+        return (null);
     }
 
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineXML("<VarInitDeclaration>");
+        ast.I.visit(this, null);
+        ast.E.visit(this, null);
+        writeLineXML("</VarInitDeclaration>");
+        return (null);
     }
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineXML("<LocalDeclaration>");
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        writeLineXML("</LocalDeclaration>");
+        return (null);
     }
 
     @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        writeLineXML("<ProcFuncsDeclaration>");
+        if (ast.PD != null){
+            ast.PD.visit(this, null);
+            if (ast.PF != null){
+                ast.PF.visit(this, null);
+            }
+        }
+        if (ast.PD != null){
+            ast.PF.visit(this, null);
+            if (ast.PF != null){
+                ast.PF.visit(this, null);
+            }
+        }
+        writeLineXML("</ProcFuncsDeclaration>");
+        return (null);
     }
 
 

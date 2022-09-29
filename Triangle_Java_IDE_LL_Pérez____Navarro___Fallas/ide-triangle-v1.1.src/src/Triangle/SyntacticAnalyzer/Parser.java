@@ -373,7 +373,7 @@ public class Parser {
 
                     // Caso predetermidado por si no coincide con algun caso anterior del "loop"
                     default:
-                        syntacticError("\"%\" cannot start a command",
+                        syntacticError("\"%\" cannot start a loop command",
                                 currentToken.spelling);
                         break;
                 }

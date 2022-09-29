@@ -168,11 +168,13 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
-        writeLineHTML("<BinaryExpression>");
+        writeLineHTML("( <font style='paddingleft:1em'>");
+        writeLineHTML("<font color='#0000cd'>");
         ast.E1.visit(this, null);
         ast.O.visit(this, null);
+        writeLineHTML("<font color='#0000cd'>");
         ast.E2.visit(this, null);
-        writeLineHTML("</BinaryExpression>");
+        writeLineHTML(") <font style='paddingleft:1em'>");
         return null;
     }
 
@@ -206,9 +208,7 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
-        writeLineHTML("<IntegerExpression>");
         ast.IL.visit(this, null);
-        writeLineHTML("</IntegerExpression>");
         return null;
     }
 
@@ -530,12 +530,12 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
-        writeLineHTML("<IntegerLiteral value=\"" + ast.spelling + "\"/>");
+        writeLineHTML(ast.spelling + " </font>");
         return null;
     }
 
     public Object visitOperator(Operator ast, Object obj) {
-        writeLineHTML("<Operator value=\"" + transformOperator(ast.spelling) + "\"/>");
+        writeLineHTML(transformOperator(ast.spelling)  + " </font>");
         return null;
     }
 

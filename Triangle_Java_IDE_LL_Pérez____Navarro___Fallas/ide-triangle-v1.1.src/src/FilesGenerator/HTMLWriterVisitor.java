@@ -108,6 +108,7 @@ public class HTMLWriterVisitor implements Visitor {
     public Object visitCallCommand(CallCommand ast, Object obj) {
         ast.I.visit(this, null);
         ast.APS.visit(this, null);
+        writeLineHTML("() <font style='paddingleft:1em'>");
         return null;
     }
 
@@ -270,6 +271,7 @@ public class HTMLWriterVisitor implements Visitor {
 
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         ast.I.visit(this, null);
+        writeLineHTML("() <font style='paddingleft:1em'>");
         writeLineHTML("<b>~ </b><font style='paddingleft:1em'>");
         ast.FPS.visit(this, null);
         ast.C.visit(this, null);

@@ -1,1 +1,1 @@
-loop a x do y end
+loop while x do y end

@@ -1,0 +1,10 @@
+let
+	var j init 5;
+	var i init 'c';
+	var y : Integer
+in
+	nil ;
+      put (i)
+end
+
+! OK

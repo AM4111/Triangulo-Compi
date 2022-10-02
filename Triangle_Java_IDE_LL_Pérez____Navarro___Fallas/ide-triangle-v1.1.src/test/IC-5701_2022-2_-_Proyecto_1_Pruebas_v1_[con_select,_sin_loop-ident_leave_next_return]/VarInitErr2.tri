@@ -1,0 +1,9 @@
+let
+	var j init 'c';
+	var i init 4 : Integer; 
+	var y : Integer
+in
+	nil 
+end
+
+! Error: "i" no debería tener declaración de tipo

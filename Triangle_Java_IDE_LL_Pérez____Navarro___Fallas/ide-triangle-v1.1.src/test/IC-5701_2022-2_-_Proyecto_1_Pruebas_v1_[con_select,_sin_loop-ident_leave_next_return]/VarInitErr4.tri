@@ -1,0 +1,9 @@
+let
+	var j := 'c'; ! sintaxis inválida, en lugar de ":=" debe ser "init"
+	var i : Integer;
+	var y : Integer
+in
+	nil
+end
+
+! Error: usa ":=" y no "init" 

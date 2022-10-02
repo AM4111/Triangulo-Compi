@@ -1,0 +1,13 @@
+let 
+	local
+		var a init 5;
+		var b init 15
+	! "in" falta, reporta error porque espera ";" o "in"
+		var c init a * b *2
+	end ; ! composición secuencial de declaraciones
+	var d init 5
+in
+	putint(c)
+end
+
+! Error: Falta el in del local. Puede haber variedad de mensajes de error

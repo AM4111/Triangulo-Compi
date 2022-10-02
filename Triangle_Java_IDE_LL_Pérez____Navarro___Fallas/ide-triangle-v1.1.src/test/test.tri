@@ -1,1 +1,0 @@
-loop do x() while (1+1) end 

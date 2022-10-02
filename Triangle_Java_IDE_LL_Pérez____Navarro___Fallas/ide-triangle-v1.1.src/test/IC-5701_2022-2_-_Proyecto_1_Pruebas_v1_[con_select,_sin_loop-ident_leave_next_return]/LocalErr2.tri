@@ -1,0 +1,14 @@
+let
+	local
+		var a init 5;
+		var b init 15
+	in
+		var c init a * b *2
+	! "end" falta
+	;
+	var d init 5 ! puede reportar que encontró "in" cuando esperaba ";" o "end"
+in
+	putint(c)
+end
+
+! Error: Falta el end del local

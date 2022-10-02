@@ -1,0 +1,3 @@
+for i from 5 to 6 do nil ; nil end
+
+! loop omitido antes del for

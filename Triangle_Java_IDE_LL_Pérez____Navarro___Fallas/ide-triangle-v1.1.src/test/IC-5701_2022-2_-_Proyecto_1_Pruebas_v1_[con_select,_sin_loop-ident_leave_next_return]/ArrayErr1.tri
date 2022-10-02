@@ -1,0 +1,7 @@
+let
+	var lista : array of Integer
+in
+	nil 
+end
+
+! Error: Falta tamaño del array

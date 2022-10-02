@@ -1,0 +1,3 @@
+loop for i from 5 to 6 i < 5 do nil ; nil end
+
+!falta until o while después del 6, o falta un do. i es un identificador

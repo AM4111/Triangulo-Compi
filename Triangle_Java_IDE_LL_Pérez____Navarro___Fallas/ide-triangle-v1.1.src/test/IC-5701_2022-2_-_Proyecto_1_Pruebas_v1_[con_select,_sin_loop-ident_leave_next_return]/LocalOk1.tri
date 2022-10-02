@@ -1,0 +1,13 @@
+let
+	local
+		var a init 5;
+		var b init 15
+	in
+		var c init a * b * 2
+	end;
+	var d init 5
+in
+	putint(c)
+end
+
+! Ok 

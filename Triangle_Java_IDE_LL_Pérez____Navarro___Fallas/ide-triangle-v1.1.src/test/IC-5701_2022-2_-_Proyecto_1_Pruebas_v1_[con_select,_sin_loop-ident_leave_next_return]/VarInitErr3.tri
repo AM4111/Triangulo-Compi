@@ -1,0 +1,9 @@
+let
+	var j init 'c';
+	var i : Integer init 0; 
+	var y : Integer
+in
+	nil 
+end
+
+! Error sintáctico: inicialización después de denotador de tipo

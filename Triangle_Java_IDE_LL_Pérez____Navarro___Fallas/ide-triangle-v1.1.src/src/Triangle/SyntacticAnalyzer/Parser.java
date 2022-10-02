@@ -222,15 +222,11 @@ public class Parser {
       -Eliminación de comando vacío
        Autor: Joshua
              */
- /*   case Token.BEGIN:
+            /*   case Token.BEGIN:
       acceptIt();
       commandAST = parseCommand();
       accept(Token.END);
       break;
-
-    
-
-    
     //Cambios Nuevos
     /*
       -If sin | y con RestOfIf
@@ -842,7 +838,7 @@ public class Parser {
             {
                 acceptIt();
                 ProcFuncDeclaration pfAST;
-                pfAST = parseProcfuncs();
+                pfAST = parseProcfuncsAUX();
                 accept(Token.END);
                 finish(declarationPos);
                 compoundDeclarationAST = pfAST;
@@ -872,6 +868,91 @@ public class Parser {
         return compoundDeclarationAST;
     }
 
+    ProcFuncDeclaration parseProcfuncsAUX() throws SyntaxError {
+        ProcFuncDeclaration procFuncsDeclarationAST = null; // in case there's a syntactic error
+        FuncDeclaration fdAST = null;
+        ProcDeclaration pdAST = null;
+        SourcePosition declarationPos = new SourcePosition();
+        start(declarationPos);
+
+        switch (currentToken.kind){
+            case Token.PROC:
+            {
+                acceptIt();
+                Identifier iAST = parseIdentifier();
+                accept(Token.LPAREN);
+                FormalParameterSequence fpsAST = parseFormalParameterSequence();
+                accept(Token.RPAREN);
+                accept(Token.IS);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                pdAST = new ProcDeclaration(iAST,fpsAST,cAST,declarationPos);
+               // finish(declarationPos);
+               // procFuncsDeclarationAST = new ProcFuncDeclaration(pdAST, declarationPos);
+                /*if (currentToken.kind == Token.BAR){
+                    acceptIt();
+                    ProcFuncDeclaration pfdAST = parseProcfuncs();
+                    finish(declarationPos);
+                    procFuncsDeclarationAST = new ProcFuncDeclaration(pdAST,pfdAST, declarationPos);
+                }
+                else
+                {
+                    finish(declarationPos);
+                    procFuncsDeclarationAST = new ProcFuncDeclaration(pdAST, declarationPos);
+                }*/
+            }
+            break;
+
+            case Token.FUNC:
+            {
+                acceptIt();
+                Identifier iAST = parseIdentifier();
+                accept(Token.LPAREN);
+                FormalParameterSequence fpsAST = parseFormalParameterSequence();
+                accept(Token.RPAREN);
+                accept(Token.COLON);
+                TypeDenoter tdAST = parseTypeDenoter();
+                accept(Token.IS);
+                Expression eAST = parseExpression();
+
+                fdAST = new FuncDeclaration(iAST,fpsAST,tdAST,eAST,declarationPos);
+               // finish(declarationPos);
+                //procFuncsDeclarationAST = new ProcFuncDeclaration(fdAST, declarationPos);
+
+                /*if (currentToken.kind == Token.BAR){
+                    acceptIt();
+                    ProcFuncDeclaration pfdAST = parseProcfuncs();
+                    finish(declarationPos);
+                    procFuncsDeclarationAST = new ProcFuncDeclaration(fdAST,pfdAST, declarationPos);
+                }
+                else
+                {
+                    finish(declarationPos);
+                    procFuncsDeclarationAST = new ProcFuncDeclaration(fdAST, declarationPos);
+                }*/
+
+            }
+            break;
+
+            default:
+                syntacticError("\"%\" cannot start a declaration",
+                        currentToken.spelling);
+                break;
+        }
+
+        accept(Token.BAR);
+        ProcFuncDeclaration pfdAST2 =  parseProcfuncs();
+        finish(declarationPos);
+        if (fdAST != null){
+            procFuncsDeclarationAST = new ProcFuncDeclaration(fdAST,pfdAST2,declarationPos);
+        }
+        else{
+            procFuncsDeclarationAST = new ProcFuncDeclaration(pdAST,pfdAST2,declarationPos);
+        }
+
+        return  procFuncsDeclarationAST;
+    }
+
     ProcFuncDeclaration parseProcfuncs() throws SyntaxError{
         ProcFuncDeclaration procFuncsDeclarationAST = null; // in case there's a syntactic error
 
@@ -890,7 +971,9 @@ public class Parser {
                 Command cAST = parseCommand();
                 accept(Token.END);
                 ProcDeclaration pdAST = new ProcDeclaration(iAST,fpsAST,cAST,declarationPos);
+
                 if (currentToken.kind == Token.BAR){
+                    acceptIt();
                     ProcFuncDeclaration pfdAST = parseProcfuncs();
                     finish(declarationPos);
                     procFuncsDeclarationAST = new ProcFuncDeclaration(pdAST,pfdAST, declarationPos);
@@ -914,8 +997,11 @@ public class Parser {
                 TypeDenoter tdAST = parseTypeDenoter();
                 accept(Token.IS);
                 Expression eAST = parseExpression();
+
                 FuncDeclaration fdAST = new FuncDeclaration(iAST,fpsAST,tdAST,eAST,declarationPos);
+
                 if (currentToken.kind == Token.BAR){
+                    acceptIt();
                     ProcFuncDeclaration pfdAST = parseProcfuncs();
                     finish(declarationPos);
                     procFuncsDeclarationAST = new ProcFuncDeclaration(fdAST,pfdAST, declarationPos);
@@ -1039,10 +1125,6 @@ public class Parser {
         return formalAST;
     }
 
-    /* TODO
-      -Añadir las reglas de Proc Func
-      -Añadir las reglas de Proc Funcs
-     */
     ActualParameterSequence parseActualParameterSequence() throws SyntaxError {
         ActualParameterSequence actualsAST;
 

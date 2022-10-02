@@ -1,0 +1,3 @@
+loop for x in do putint (x) end
+
+! Falta la expresión

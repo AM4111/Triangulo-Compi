@@ -1,0 +1,3 @@
+loop do nil ; nil while 3=3 end
+
+! OK

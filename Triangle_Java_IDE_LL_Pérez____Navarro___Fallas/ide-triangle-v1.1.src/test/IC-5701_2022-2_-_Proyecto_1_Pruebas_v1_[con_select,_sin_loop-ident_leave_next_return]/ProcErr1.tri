@@ -1,0 +1,8 @@
+let
+	proc p()
+		~ puteol(); puteol()
+in
+	nil
+end
+
+! Error: Falta el end del proc

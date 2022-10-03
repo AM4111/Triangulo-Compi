@@ -761,7 +761,7 @@ public class HTMLWriterVisitor implements Visitor {
                 ast.PF.visit(this, null);
             }
         }
-        if (ast.PD != null) {
+        if (ast.PF != null) {
             ast.PF.visit(this, null);
             if (ast.PF != null) {
                 ast.PF.visit(this, null);

@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Triangulo_v1">
-    <output-path>$PROJECT_DIR$/out/artifacts/Triangulo_v1</output-path>
-    <root id="archive" name="Triangulo_v1.jar" />
-  </artifact>
-</component>

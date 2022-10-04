@@ -104,7 +104,9 @@ public class HTMLWriterVisitor implements Visitor {
         writeLineHTML("</AssignCommand>");
         return null;
     }
-
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de call command
     public Object visitCallCommand(CallCommand ast, Object obj) {
         ast.I.visit(this, null);
         ast.APS.visit(this, null);
@@ -112,13 +114,17 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de empty command
     public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
         writeLineHTML("<font color='#00b300'>! Test of nil, it runs correctly. </font>");
         writeLineHTML("<br><br>");
         writeLineHTML("<b>nil </b><font style='paddingleft:1em'>");
         return null;
     }
-
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de if command
     public Object visitIfCommand(IfCommand ast, Object obj) {
         writeLineHTML("<font color='#00b300'>! Test of loop until command, it runs correctly. </font>");
         writeLineHTML("<br><br>");
@@ -139,7 +145,9 @@ public class HTMLWriterVisitor implements Visitor {
         writeLineHTML("</LetCommand>");
         return null;
     }
-
+    
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de sequential command
     public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
         if (ast.C1 != null) {
             ast.C1.visit(this, null);
@@ -167,6 +175,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de binary expression
     public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
         writeLineHTML("( <font style='paddingleft:1em'>");
         writeLineHTML("<font color='#0000cd'>");
@@ -207,6 +217,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de integer expression
     public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
         ast.IL.visit(this, null);
         return null;
@@ -235,6 +247,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de vname expression
     public Object visitVnameExpression(VnameExpression ast, Object obj) {
         ast.V.visit(this, null);
         return null;
@@ -269,6 +283,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de proc declaration
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         ast.I.visit(this, null);
         writeLineHTML("() <font style='paddingleft:1em'>");
@@ -279,6 +295,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de sequential declaration
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         if (ast.D1 != null) {
             ast.D1.visit(this, null);
@@ -307,6 +325,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de var declaration
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
         writeLineHTML("<b>var </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
@@ -431,6 +451,7 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
     // Se elimina la etiqueta
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
         //writeLineHTML("<EmptyActualParameterSequence/>");
@@ -524,16 +545,22 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     // Se obtiene el valor de la expresion
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de identifier
     public Object visitIdentifier(Identifier ast, Object obj) {
         writeLineHTML(ast.spelling + " </font>");
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de integer literal
     public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
         writeLineHTML(ast.spelling + " </font>");
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de operator
     public Object visitOperator(Operator ast, Object obj) {
         writeLineHTML(transformOperator(ast.spelling)  + " </font>");
         return null;
@@ -548,6 +575,8 @@ public class HTMLWriterVisitor implements Visitor {
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de simple vname
     public Object visitSimpleVname(SimpleVname ast, Object obj) {
         writeLineHTML("<font color='#0000cd'>");
         ast.I.visit(this, null);
@@ -563,11 +592,15 @@ public class HTMLWriterVisitor implements Visitor {
     }
 
     // Programs
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de program
     public Object visitProgram(Program ast, Object obj) {
         ast.C.visit(this, null);
         return null;
     }
 
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se modifica el metodo visitor de write line HTML
     private void writeLineHTML(String line) {
         try {
             fileWriter.write(line);
@@ -712,7 +745,8 @@ public class HTMLWriterVisitor implements Visitor {
         return (null);
     }
 
-    @Override
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de rest of if command
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
         if (ast.BC1 != null) {
             ast.BC1.visit(this, null);
@@ -722,7 +756,8 @@ public class HTMLWriterVisitor implements Visitor {
         return (null);
     }
 
-    @Override
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de var command
     public Object visitBarCommand(BarCommand ast, Object o) {
         ast.E1.visit(this, null);
         writeLineHTML("<b>then </b><font style='paddingleft:1em'>");
@@ -734,7 +769,8 @@ public class HTMLWriterVisitor implements Visitor {
         return (null);
     }
 
-    @Override
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de var init declaration
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
         writeLineHTML("<b>var </b><font style='paddingleft:1em'>");
         ast.I.visit(this, null);
@@ -743,7 +779,8 @@ public class HTMLWriterVisitor implements Visitor {
         return (null);
     }
 
-    @Override
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de local declaration
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
         writeLineHTML("<b>local </b><font style='paddingleft:1em'>");
         ast.D1.visit(this, null);
@@ -753,7 +790,8 @@ public class HTMLWriterVisitor implements Visitor {
         return (null);
     }
 
-    @Override
+    // Autores: Max Lee y Paula Mariana Bustos
+    // Se agrega el metodo visitor de procs funcs declaration
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
         if (ast.PD != null) {
             ast.PD.visit(this, null);

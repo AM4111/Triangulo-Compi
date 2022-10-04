@@ -374,14 +374,14 @@ public class Parser {
                         break;
                 }
                 break;
-            case Token.SEMICOLON:
-            case Token.END:
-            case Token.ELSE:
-            case Token.IN:
+            //case Token.SEMICOLON:
+            //case Token.END:
+            //case Token.ELSE:
+            //case Token.IN:
                 //case Token.EOT: Comando vacío eliminado
-                finish(commandPos);
-                commandAST = new EmptyCommand(commandPos);
-                break;
+            //    finish(commandPos);
+            //    commandAST = new EmptyCommand(commandPos);
+            //    break;
 
 
             // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia

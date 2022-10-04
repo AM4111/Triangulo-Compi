@@ -63,6 +63,7 @@ public class IDECompiler {
                 }
             }
         }
+        // Se agrego la funcionalidad de generar el XML cuando la sintaxis sea correcta y HTML 
         String fileSourceName = sourceName.substring(0, sourceName.length() -3);
         if (success) {
             System.out.println("Compilation was successful.");

@@ -278,7 +278,9 @@ public final class Checker implements Visitor {
     ast.C1.visit(this,null);
 
     //Verify another bar command, if it's present
-    ast.BC1.visit(this,null);
+    if (ast.BC1 != null){
+      ast.BC1.visit(this,null);
+    }
 
     return null;
   }

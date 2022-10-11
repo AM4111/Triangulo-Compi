@@ -82,7 +82,7 @@ public final class Checker implements Visitor {
     return null;
   }
   
-  // Autores: Max Lee y Paula Mariana Bustos
+  // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToDoCommand
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
     // Identificador
@@ -92,16 +92,17 @@ public final class Checker implements Visitor {
     else
       reporter.reportError("\"%\" is not a procedure identifier",
                            ast.I.spelling, ast.I.position);
-    // Expresion 1
+
+    // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
-    if (! eType1.equals(StdEnvironment.booleanType))
+    if (! eType1.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E1.position);
-    // Expresion 2
+              "Integer expected here", "", ast.E1.position); //Nuevo Error
+    // Expresion 2 ; Verifica que sea de tipo entero
     TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
-    if (! eType2.equals(StdEnvironment.booleanType))
+    if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E2.position);
+              "Integer expected here", "", ast.E2.position); //Nuevo Error
     // Comando
     ast.C.visit(this, null);
     return null;
@@ -209,11 +210,19 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  //Cambios nuevos - parte 1,2
+  //Autor: Joshua Arcia
+  //Modificación If original para reflejar REST OF IF
   public Object visitIfCommand(IfCommand ast, Object o) {
+    //Expression is boolean
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError("Boolean expression expected here", "", ast.E.position);
+
+    //Verify Command
     ast.C1.visit(this, null);
+
+    //Verify Rest Of if
     ast.ROI1.visit(this, null);
     return null;
   }
@@ -248,11 +257,29 @@ public final class Checker implements Visitor {
    */
   @Override
   public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
+    //Verify Command
+    ast.C1.visit(this,null);
+
+    //Verify Bar command if it's present
+    if (ast.BC1 != null){
+      ast.BC1.visit(this,null);
+    }
     return null;
   }
 
   @Override
   public Object visitBarCommand(BarCommand ast, Object o) {
+    //Expression is boolean
+    TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError("Boolean expression expected here", "", ast.E1.position);
+
+    //Verify Command
+    ast.C1.visit(this,null);
+
+    //Verify another bar command, if it's present
+    ast.BC1.visit(this,null);
+
     return null;
   }
 

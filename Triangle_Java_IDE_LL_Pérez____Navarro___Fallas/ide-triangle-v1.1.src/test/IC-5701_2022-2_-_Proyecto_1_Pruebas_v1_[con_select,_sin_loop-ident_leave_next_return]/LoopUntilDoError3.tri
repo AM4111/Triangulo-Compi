@@ -1,0 +1,3 @@
+loop until 2+2 do nil ; nil end
+
+! No es una expresión booleana

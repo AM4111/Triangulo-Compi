@@ -85,7 +85,7 @@ public final class Checker implements Visitor {
   // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToDoCommand
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
-    // Identificador
+
     Declaration binding = (Declaration) ast.I.visit(this, null);
     if (binding == null)
       reportUndeclared(ast.I);
@@ -108,7 +108,7 @@ public final class Checker implements Visitor {
     return null;
   }
   
-    // Autores: Max Lee y Paula Mariana Bustos
+    // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToWhileDoCommand
   public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o){
     // Identificador
@@ -118,16 +118,16 @@ public final class Checker implements Visitor {
     else
       reporter.reportError("\"%\" is not a procedure identifier",
                            ast.I.spelling, ast.I.position);
-    // Expresion 1
+    // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
-    if (! eType1.equals(StdEnvironment.booleanType))
+    if (! eType1.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E1.position);
-    // Expresion 2
+              "Integer expected here", "", ast.E1.position); //Nuevo Error
+    // Expresion 2 ; Verifica que sea de tipo entero
     TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
-    if (! eType2.equals(StdEnvironment.booleanType))
+    if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E2.position);
+              "Integer expected here", "", ast.E2.position); //Nuevo Error
     // Expresion 3
     TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
     if (! eType3.equals(StdEnvironment.booleanType))
@@ -148,16 +148,16 @@ public final class Checker implements Visitor {
     else
       reporter.reportError("\"%\" is not a procedure identifier",
                            ast.I.spelling, ast.I.position);
-    // Expresion 1
+    // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
-    if (! eType1.equals(StdEnvironment.booleanType))
+    if (! eType1.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E1.position);
-    // Expresion 2
+              "Integer expected here", "", ast.E1.position); //Nuevo Error
+    // Expresion 2 ; Verifica que sea de tipo entero
     TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
-    if (! eType2.equals(StdEnvironment.booleanType))
+    if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Boolean expression expected here", "", ast.E2.position);
+              "Integer expected here", "", ast.E2.position); //Nuevo Error
     // Expresion 3
     TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
     if (! eType3.equals(StdEnvironment.booleanType))

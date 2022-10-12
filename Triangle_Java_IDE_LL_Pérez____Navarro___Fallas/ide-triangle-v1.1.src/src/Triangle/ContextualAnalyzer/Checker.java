@@ -34,10 +34,10 @@ public final class Checker implements Visitor {
   // Se agrega el metodo del comando visitLoopWhileDoCommand
   public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    if (! eType.equals(StdEnvironment.booleanType))
+    if (! eType.equals(StdEnvironment.booleanType)) //Expression is boolean
       reporter.reportError(
               "Boolean expression expected here", "", ast.E.position);
-    ast.C.visit(this, null);
+    ast.C.visit(this, null);// Command contextual verification
     return null;
   }
   
@@ -53,10 +53,10 @@ public final class Checker implements Visitor {
    // Se agrega el metodo del comando visitLoopDoWhileCommand
    public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    if (! eType.equals(StdEnvironment.booleanType))
+    if (! eType.equals(StdEnvironment.booleanType)) // Expression is boolean
       reporter.reportError(
               "Boolean expression expected here", "", ast.E.position);
-    ast.C.visit(this, null);
+    ast.C.visit(this, null);// Command contextual verification
     return null;
   }
    
@@ -64,19 +64,19 @@ public final class Checker implements Visitor {
    // Se agrega el metodo del comando visitLoopWhileDoCommand
    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    if (! eType.equals(StdEnvironment.booleanType))
+    if (! eType.equals(StdEnvironment.booleanType)) //Boolean verification
       reporter.reportError(
               "Boolean expression expected here", "", ast.E.position);
-    ast.C.visit(this, null);
+    ast.C.visit(this, null); // Command contextual verification
     return null;
   }
    
   // Autores: Max Lee y Paula Mariana Bustos
   // Se agrega el metodo del comando visitLoopWhileDoCommand
   public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){
-    ast.C.visit(this, null);
+    ast.C.visit(this, null); //Command contextual verification
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    if (! eType.equals(StdEnvironment.booleanType))
+    if (! eType.equals(StdEnvironment.booleanType)) // Boolean verification
       reporter.reportError(
               "Boolean expression expected here", "", ast.E.position);
     return null;
@@ -142,6 +142,7 @@ public final class Checker implements Visitor {
   // Se agrega el metodo del comando visitLoopForFromToUntilDoCommand
   public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o){
     // Identificador
+      //idTable.enter(ast.I.spelling,);
     Declaration binding = (Declaration) ast.I.visit(this, null);
     if (binding == null)
       reportUndeclared(ast.I);
@@ -503,7 +504,22 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-        return null;
+      idTable.openScope(); // scope +1 ; shared scope for al pf declarations
+
+        //Verify Func declaration if it's present
+      if (ast.FD != null)
+          ast.FD.visit(this,null);
+
+        //Verify Proc declaration if it's present
+      if (ast.PD != null)
+          ast.PD.visit(this,null);
+
+        //Verify ProcFunc declaration if it's present
+      if (ast.PF != null)
+          ast.PF.visit(this,null);
+
+      idTable.closeScope();// scope -1
+      return null;
     }
 
     // Array Aggregates
@@ -562,9 +578,9 @@ public final class Checker implements Visitor {
   }
 
   public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
-    idTable.openScope();
+    idTable.openScope(); // scope +1
     ast.FPS.visit(this, null);
-    idTable.closeScope();
+    idTable.closeScope(); // scope -1
     ast.T = (TypeDenoter) ast.T.visit(this, null);
     idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
@@ -574,9 +590,9 @@ public final class Checker implements Visitor {
   }
 
   public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
-    idTable.openScope();
+    idTable.openScope(); // scope +1
     ast.FPS.visit(this, null);
-    idTable.closeScope();
+    idTable.closeScope(); // scope -1
     idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("duplicated formal parameter \"%\"",

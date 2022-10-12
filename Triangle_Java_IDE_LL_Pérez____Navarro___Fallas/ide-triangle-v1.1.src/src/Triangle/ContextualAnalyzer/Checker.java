@@ -85,14 +85,6 @@ public final class Checker implements Visitor {
   // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToDoCommand
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
-
-    Declaration binding = (Declaration) ast.I.visit(this, null);
-    if (binding == null)
-      reportUndeclared(ast.I);
-    else
-      reporter.reportError("\"%\" is not a procedure identifier",
-                           ast.I.spelling, ast.I.position);
-
     // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
     if (! eType1.equals(StdEnvironment.integerType))
@@ -103,8 +95,23 @@ public final class Checker implements Visitor {
     if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
               "Integer expected here", "", ast.E2.position); //Nuevo Error
+
+
     // Comando
+    idTable.openScope();
+   /* ast.I.type = eType1; // Assigns it to the Identifier
+    idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable
+    */
+    Declaration binding = (Declaration) ast.I.visit(this, null); // Check if I is declared
+    if (binding == null)
+      reportUndeclared(ast.I);
+    else
+      reporter.reportError("\"%\" is not a procedure identifier",
+              ast.I.spelling, ast.I.position);
+
     ast.C.visit(this, null);
+
+    idTable.closeScope();
     return null;
   }
   
@@ -494,6 +501,14 @@ public final class Checker implements Visitor {
 
   @Override
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
+
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null); // Gets the expression type
+    ast.I.type = eType; // Assigns it to the Identifier
+    idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable
+    if (ast.duplicated) // Checks if the Identifier exists already within the idTable
+      reporter.reportError ("identifier \"%\" already declared",
+              ast.I.spelling, ast.position);
+
     return null;
   }
 
@@ -864,7 +879,7 @@ public final class Checker implements Visitor {
     return ast.type;
   }
 
-  public Object visitSimpleVname(SimpleVname ast, Object o) {
+  public Object visitSimpleVname(SimpleVname ast, Object o) { //Modify for new declarations
     ast.variable = false;
     ast.type = StdEnvironment.errorType;
     Declaration binding = (Declaration) ast.I.visit(this, null);
@@ -877,6 +892,9 @@ public final class Checker implements Visitor {
       } else if (binding instanceof VarDeclaration) {
         ast.type = ((VarDeclaration) binding).T;
         ast.variable = true;
+      } else if (binding instanceof VarInitDeclaration) { //Cambio para verificar VarInitDeclarations
+        ast.type = ((VarInitDeclaration) binding).I.type;
+        ast.variable = true; //Declarado como variable, no como constante
       } else if (binding instanceof ConstFormalParameter) {
         ast.type = ((ConstFormalParameter) binding).T;
         ast.variable = false;

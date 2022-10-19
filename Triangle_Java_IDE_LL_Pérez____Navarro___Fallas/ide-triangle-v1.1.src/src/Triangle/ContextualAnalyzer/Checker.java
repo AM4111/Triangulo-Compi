@@ -202,7 +202,6 @@ public final class Checker implements Visitor {
 
 
   public Object visitCallCommand(CallCommand ast, Object o) {
-
     Declaration binding = (Declaration) ast.I.visit(this, null);
     if (binding == null)
       reportUndeclared(ast.I);
@@ -210,7 +209,8 @@ public final class Checker implements Visitor {
       ast.APS.visit(this, ((ProcDeclaration) binding).FPS);
     } else if (binding instanceof ProcFormalParameter) {
       ast.APS.visit(this, ((ProcFormalParameter) binding).FPS);
-    } else
+    }
+      else
       reporter.reportError("\"%\" is not a procedure identifier",
                            ast.I.spelling, ast.I.position);
     return null;
@@ -516,7 +516,7 @@ public final class Checker implements Visitor {
 
   @Override
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-    exportIdentifiers(ast.D2);
+    exportLocalIdentifiers(ast.D2);
     idTable.openScope();
     ast.D1.visit(this,null);
     ast.D2.visit(this,null);
@@ -525,8 +525,58 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  private void exportIdentifiers(Declaration ast) {
-    String declarationType = ast.getClass().getSimpleName();
+
+  @Override
+    public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
+
+    exportProcFuncsIdentifiers(ast,null); //Exports the proc funcs
+
+      idTable.openScope();
+      visitRestOfProcFuncsDeclarations(ast, null);
+      idTable.closeScope();
+
+      return null;
+    }
+
+    public void exportProcFuncsIdentifiers (ProcFuncDeclaration ast, Object o) {
+
+      if (ast.FD != null) {
+        idTable.enter(ast.FD.I.spelling, ast.FD);
+      }
+
+
+      if (ast.PD != null) {
+        idTable.enter(ast.PD.I.spelling, ast.PD);
+        idTable.openScope();
+        ast.PD.FPS.visit(this, null);
+        idTable.closeScope();
+      }
+
+      if (ast.PF != null) {
+        exportProcFuncsIdentifiers(ast.PF,null);
+      }
+
+    }
+
+    public Object visitRestOfProcFuncsDeclarations (ProcFuncDeclaration ast, Object o) {
+
+      if (ast.FD != null){
+        ast.FD.visit(this,null);
+      }
+
+      //Verify Proc declaration if it's present
+      if (ast.PD != null){
+        ast.PD.visit(this,null);
+      }
+
+      //Verify ProcFunc declaration if it's present
+      if (ast.PF != null)
+        visitRestOfProcFuncsDeclarations(ast.PF,null);
+      return null;
+    }
+
+    public void exportLocalIdentifiers(Declaration ast) {
+    String declarationType = ast.getClass().getSimpleName(); //Gets the declaration type
 
     switch (declarationType){
 
@@ -537,8 +587,8 @@ public final class Checker implements Visitor {
 
       case "ConstDeclaration":
       {
-        ConstDeclaration test = (ConstDeclaration) ast;
-        idTable.enter(test.I.spelling, test);
+        ConstDeclaration test = (ConstDeclaration) ast; //Declares it
+        idTable.enter(test.I.spelling, test); //Inserts the declaration into the Identification Table for future use
         if (test.duplicated)
           reporter.reportError ("identifier \"%\" already declared",
                   test.I.spelling, test.position);
@@ -586,7 +636,7 @@ public final class Checker implements Visitor {
       case "visitVarDeclaration":
       {
         VarDeclaration test = (VarDeclaration) ast;
-       // test.T = (TypeDenoter) test.T.visit(this, null);
+        // test.T = (TypeDenoter) test.T.visit(this, null);
         idTable.enter (test.I.spelling, test);
         if (test.duplicated)
           reporter.reportError ("identifier \"%\" already declared",
@@ -596,8 +646,8 @@ public final class Checker implements Visitor {
       case "VarInitDeclaration":
       {
         VarInitDeclaration test = (VarInitDeclaration) ast;
-       // TypeDenoter eType = (TypeDenoter) test.E.visit(this, null); // Gets the expression type
-       // test.I.type = eType; // Assigns it to the Identifier
+        // TypeDenoter eType = (TypeDenoter) test.E.visit(this, null); // Gets the expression type
+        // test.I.type = eType; // Assigns it to the Identifier
         idTable.enter(test.I.spelling,test); // Inserts the Identifier into the idTable
         if (test.duplicated) // Checks if the Identifier exists already within the idTable
           reporter.reportError ("identifier \"%\" already declared",
@@ -624,51 +674,6 @@ public final class Checker implements Visitor {
     }
 
   }
-
-  @Override
-    public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-      //idTable.openScope(); // scope +1 ; shared scope for al pf declarations
-        // Verify Func declaration if it's present
-      //insertProcFuncsIdentifier(ast,null);
-
-      visitRestOfProcFuncsDeclarations(ast, null);
-      //idTable.closeScope();// scope -1
-      return null;
-    }
-
-    public void insertProcFuncsIdentifier (ProcFuncDeclaration ast, Object o) {
-
-      if (ast.FD != null) {
-        idTable.enter(ast.FD.I.spelling, ast);
-      }
-
-
-      if (ast.PD != null) {
-        idTable.enter(ast.PD.I.spelling, ast);
-      }
-
-      if (ast.PF != null) {
-        insertProcFuncsIdentifier(ast.PF,o);
-      }
-
-    }
-
-    public Object visitRestOfProcFuncsDeclarations (ProcFuncDeclaration ast, Object o) {
-
-      if (ast.FD != null){
-        ast.FD.visit(this,null);
-      }
-
-      //Verify Proc declaration if it's present
-      if (ast.PD != null){
-        ast.PD.visit(this,null);
-      }
-
-      //Verify ProcFunc declaration if it's present
-      if (ast.PF != null)
-        visitRestOfProcFuncsDeclarations(ast.PF,null);
-      return null;
-    }
 
     // Array Aggregates
 

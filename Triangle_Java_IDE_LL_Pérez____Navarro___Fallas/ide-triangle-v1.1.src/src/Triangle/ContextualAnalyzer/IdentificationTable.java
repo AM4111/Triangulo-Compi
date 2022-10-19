@@ -30,7 +30,6 @@ public final class IdentificationTable {
   // current topmost level.
 
   public void openScope () {
-
     level ++;
   }
 
@@ -53,7 +52,7 @@ public final class IdentificationTable {
 
   // Makes a new entry in the identification table for the given identifier
   // and attribute. The new entry belongs to the current level.
-  // duplicated is set to to true iff there is already an entry for the
+  // duplicated is set to true iff there is already an entry for the
   // same identifier at the current level.
 
   public void enter (String id, Declaration attr) {

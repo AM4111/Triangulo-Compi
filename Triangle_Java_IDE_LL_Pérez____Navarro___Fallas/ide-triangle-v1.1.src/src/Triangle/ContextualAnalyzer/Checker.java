@@ -27,8 +27,10 @@ import Triangle.AbstractSyntaxTrees.LoopForFromToDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToWhileDoCommand;
 import Triangle.AbstractSyntaxTrees.LoopForFromToUntilDoCommand;
 
+import java.io.ObjectStreamException;
+
 public final class Checker implements Visitor {
-    
+
   // Nuevos agregados - Parte 1
   // Autores: Max Lee y Paula Mariana Bustos  
   // Se agrega el metodo del comando visitLoopWhileDoCommand
@@ -40,7 +42,7 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null);// Command contextual verification
     return null;
   }
-  
+
   // Autores: Max Lee y Paula Mariana Bustos 
   // Se agrega el metodo del comando visitLetInCommand
    public Object visitLetInCommand(LetInCommand ast, Object o) {
@@ -48,7 +50,7 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null);
     return null;
   }
-   
+
    // Autores: Max Lee y Paula Mariana Bustos
    // Se agrega el metodo del comando visitLoopDoWhileCommand
    public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
@@ -59,7 +61,7 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null);// Command contextual verification
     return null;
   }
-   
+
    // Autores: Max Lee y Paula Mariana Bustos
    // Se agrega el metodo del comando visitLoopWhileDoCommand
    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){
@@ -70,7 +72,7 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null); // Command contextual verification
     return null;
   }
-   
+
   // Autores: Max Lee y Paula Mariana Bustos
   // Se agrega el metodo del comando visitLoopWhileDoCommand
   public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o){
@@ -81,7 +83,7 @@ public final class Checker implements Visitor {
               "Boolean expression expected here", "", ast.E.position);
     return null;
   }
-  
+
   // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToDoCommand
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
@@ -114,7 +116,7 @@ public final class Checker implements Visitor {
     idTable.closeScope();
     return null;
   }
-  
+
     // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToWhileDoCommand
   public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o){
@@ -144,7 +146,7 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null);
     return null;
   }
-  
+
     // Autores: Max Lee y Paula Mariana Bustos
   // Se agrega el metodo del comando visitLoopForFromToUntilDoCommand
   public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o){
@@ -183,7 +185,7 @@ public final class Checker implements Visitor {
       I.decl = binding;
     return binding;
   */
-  
+
   // Commands
 
   // Always returns null. Does not use the given object.
@@ -514,26 +516,157 @@ public final class Checker implements Visitor {
 
   @Override
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+    exportIdentifiers(ast.D2);
+    idTable.openScope();
+    ast.D1.visit(this,null);
+    ast.D2.visit(this,null);
+    idTable.closeScope();
+
     return null;
   }
 
-    @Override
+  private void exportIdentifiers(Declaration ast) {
+    String declarationType = ast.getClass().getSimpleName();
+
+    switch (declarationType){
+
+      case "BinaryOperatorDeclaration":
+      {
+
+      }break;
+
+      case "ConstDeclaration":
+      {
+        ConstDeclaration test = (ConstDeclaration) ast;
+        idTable.enter(test.I.spelling, test);
+        if (test.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, test.position);
+      }break;
+
+      case "FuncDeclaration":
+      {
+        FuncDeclaration test = (FuncDeclaration) ast;
+        test.T = (TypeDenoter) test.visit(this,null);
+        idTable.enter(test.I.spelling, test);
+        if (test.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, test.position);
+      }break;
+
+      case "ProcDeclaration":
+      {
+        ProcDeclaration test = (ProcDeclaration) ast;
+        idTable.enter (test.I.spelling, test); // permits recursion
+        if (test.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, ast.position);
+      }break;
+
+      case "SequentialDeclaration": //Need to test this
+      {
+        SequentialDeclaration test = (SequentialDeclaration) ast;
+        test.visit(this,null);
+      }break;
+
+      case "TypeDeclaration":
+      {
+        TypeDeclaration test = (TypeDeclaration) ast;
+        idTable.enter (test.I.spelling, test);
+        if (test.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, test.position);
+      }break;
+
+      case "UnaryOperatorDeclaration":
+      {
+
+      }break;
+
+      case "visitVarDeclaration":
+      {
+        VarDeclaration test = (VarDeclaration) ast;
+       // test.T = (TypeDenoter) test.T.visit(this, null);
+        idTable.enter (test.I.spelling, test);
+        if (test.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, test.position);
+      }break;
+
+      case "VarInitDeclaration":
+      {
+        VarInitDeclaration test = (VarInitDeclaration) ast;
+       // TypeDenoter eType = (TypeDenoter) test.E.visit(this, null); // Gets the expression type
+       // test.I.type = eType; // Assigns it to the Identifier
+        idTable.enter(test.I.spelling,test); // Inserts the Identifier into the idTable
+        if (test.duplicated) // Checks if the Identifier exists already within the idTable
+          reporter.reportError ("identifier \"%\" already declared",
+                  test.I.spelling, test.position);
+      }break;
+
+      case "LocalDeclaration": //Need to test this
+      {
+        LocalDeclaration test = (LocalDeclaration) ast;
+        test.visit(this,null);
+      }break;
+
+      case "ProcFuncsDeclaration": //Need to test this
+      {
+        ProcFuncDeclaration test = (ProcFuncDeclaration) ast;
+        test.visit(this,null);
+      }break;
+
+
+
+      default: {
+        reporter.reportError("Not an acceptable declaration",declarationType,ast.position);
+      }
+    }
+
+  }
+
+  @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-      idTable.openScope(); // scope +1 ; shared scope for al pf declarations
+      //idTable.openScope(); // scope +1 ; shared scope for al pf declarations
+        // Verify Func declaration if it's present
+      //insertProcFuncsIdentifier(ast,null);
 
-        //Verify Func declaration if it's present
-      if (ast.FD != null)
-          ast.FD.visit(this,null);
+      visitRestOfProcFuncsDeclarations(ast, null);
+      //idTable.closeScope();// scope -1
+      return null;
+    }
 
-        //Verify Proc declaration if it's present
-      if (ast.PD != null)
-          ast.PD.visit(this,null);
+    public void insertProcFuncsIdentifier (ProcFuncDeclaration ast, Object o) {
 
-        //Verify ProcFunc declaration if it's present
+      if (ast.FD != null) {
+        idTable.enter(ast.FD.I.spelling, ast);
+      }
+
+
+      if (ast.PD != null) {
+        idTable.enter(ast.PD.I.spelling, ast);
+      }
+
+      if (ast.PF != null) {
+        insertProcFuncsIdentifier(ast.PF,o);
+      }
+
+    }
+
+    public Object visitRestOfProcFuncsDeclarations (ProcFuncDeclaration ast, Object o) {
+
+      if (ast.FD != null){
+        ast.FD.visit(this,null);
+      }
+
+      //Verify Proc declaration if it's present
+      if (ast.PD != null){
+        ast.PD.visit(this,null);
+      }
+
+      //Verify ProcFunc declaration if it's present
       if (ast.PF != null)
-          ast.PF.visit(this,null);
-
-      idTable.closeScope();// scope -1
+        visitRestOfProcFuncsDeclarations(ast.PF,null);
       return null;
     }
 

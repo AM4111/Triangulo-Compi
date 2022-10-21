@@ -580,12 +580,26 @@ public final class Checker implements Visitor {
     public void exportProcFuncsIdentifiers (ProcFuncDeclaration ast, Object o) {
 
       if (ast.FD != null) {
-        idTable.enter(ast.FD.I.spelling, ast.FD);
+        ast.FD.T = (TypeDenoter) ast.FD.T.visit(this, null);
+        idTable.enter (ast.FD.I.spelling, ast); // permits recursion
+        if (ast.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  ast.FD.I.spelling, ast.position);
+        idTable.openScope();
+        ast.FD.FPS.visit(this, null);
+        TypeDenoter eType = (TypeDenoter) ast.FD.E.visit(this, null);
+        idTable.closeScope();
+        if (! ast.FD.T.equals(eType))
+          reporter.reportError ("body of function \"%\" has wrong type",
+                  ast.FD.I.spelling, ast.FD.E.position);
       }
 
 
       if (ast.PD != null) {
         idTable.enter(ast.PD.I.spelling, ast.PD);
+        if (ast.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                  ast.PD.I.spelling, ast.position);
         idTable.openScope();
         ast.PD.FPS.visit(this, null);
         idTable.closeScope();

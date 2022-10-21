@@ -86,6 +86,13 @@ public final class Checker implements Visitor {
 
   // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToDoCommand
+  /* CAMBIOS NUEVOS
+      -Verificación de tipo Entero para ambas expresiones
+   */
+
+  /* TODO
+   *      Insertar el identificador como declaración
+   * */
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
     // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
@@ -101,9 +108,9 @@ public final class Checker implements Visitor {
 
     // Comando
     idTable.openScope();
-   /* ast.I.type = eType1; // Assigns it to the Identifier
-    idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable
-    */
+    /*ast.I.type = eType1; // Assigns it to the Identifier
+    idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable, needs to be a declaration?*/
+
     Declaration binding = (Declaration) ast.I.visit(this, null); // Check if I is declared
     if (binding == null)
       reportUndeclared(ast.I);
@@ -111,7 +118,7 @@ public final class Checker implements Visitor {
       reporter.reportError("\"%\" is not a procedure identifier",
               ast.I.spelling, ast.I.position);
 
-    ast.C.visit(this, null);
+    ast.C.visit(this, null); //Command verification
 
     idTable.closeScope();
     return null;
@@ -119,6 +126,14 @@ public final class Checker implements Visitor {
 
     // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToWhileDoCommand
+  /* CAMBIOS NUEVOS
+      -Verificación de tipo entero para Exp1 y Exp2
+      -Verificación de tipo Booleano para Exp3
+      -Se agrega un error para las expresiones de enteros.
+   */
+  /*TODO
+  *    Insertar el identificador como declaración
+  * */
   public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o){
     // Identificador
     Declaration binding = (Declaration) ast.I.visit(this, null);
@@ -131,12 +146,12 @@ public final class Checker implements Visitor {
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
     if (! eType1.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Integer expected here", "", ast.E1.position); //Nuevo Error
+              "Integer expression expected here", "", ast.E1.position); //Nuevo Error
     // Expresion 2 ; Verifica que sea de tipo entero
     TypeDenoter eType2 = (TypeDenoter) ast.E2.visit(this, null);
     if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
-              "Integer expected here", "", ast.E2.position); //Nuevo Error
+              "Integer expression expected here", "", ast.E2.position); //Nuevo Error
     // Expresion 3
     TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
     if (! eType3.equals(StdEnvironment.booleanType))
@@ -147,10 +162,18 @@ public final class Checker implements Visitor {
     return null;
   }
 
-    // Autores: Max Lee y Paula Mariana Bustos
+    // Autores: Max Lee, Paula Mariana Bustos y Joshua Arcia
   // Se agrega el metodo del comando visitLoopForFromToUntilDoCommand
+  /* CAMBIOS NUEVOS
+      -Verificación de tipo entero para Exp1 y Exp2
+      -Verificación de tipo Booleano para Exp3
+      -Se agrega un error para las expresiones de enteros.
+   */
+    /*TODO
+     *    Insertar el identificador como declaración
+     * */
   public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o){
-    // Identificador
+      //Identificador
       //idTable.enter(ast.I.spelling,);
     Declaration binding = (Declaration) ast.I.visit(this, null);
     if (binding == null)
@@ -264,6 +287,13 @@ public final class Checker implements Visitor {
       -visitRestOfIfCommand
       -Modificación de if para que sea con rest of if
       -visitBarCommand
+   */
+  /* CAMBIOS NUEVOS PT2
+      Joshua:
+      -visitRestOfIfCommand
+        +Verifica los comandos, incluyendo los comandos con |
+      -visitBarCommand
+        +Verifica que la expresión sea booleana
    */
   @Override
   public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
@@ -501,6 +531,16 @@ public final class Checker implements Visitor {
    *  -ProcFuncDeclaration
    */
 
+  /* CAMBIOS NUEVOS Parte 2
+   * Autores: Joshua Arcia
+   *  -VarInitDeclaration
+   *    +Validación contextual y decoración: tipo de identificadores, identificador presente dentro de la idTable, inserción
+   *  -VarLocalDeclaration
+   *    +Visita las dos declaraciones, cada una dentro de su propio contexto
+   *  -ProcFuncDeclaration
+   *    +Exportación de los procfuncs al cuerpo de la función, procesamiento de identificadores previo al procesamiento completo de los
+   *     ProcFuncs
+   */
   @Override
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
 
@@ -516,12 +556,11 @@ public final class Checker implements Visitor {
 
   @Override
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-    exportLocalIdentifiers(ast.D2);
-    idTable.openScope();
+    idTable.openLocalScope(); //Saves the latest entry to the identification table
     ast.D1.visit(this,null);
+    idTable.addDeclaration(this.idTable.latestEntry());
     ast.D2.visit(this,null);
-    idTable.closeScope();
-
+    idTable.closeLocalScope();
     return null;
   }
 
@@ -575,105 +614,6 @@ public final class Checker implements Visitor {
       return null;
     }
 
-    public void exportLocalIdentifiers(Declaration ast) {
-    String declarationType = ast.getClass().getSimpleName(); //Gets the declaration type
-
-    switch (declarationType){
-
-      case "BinaryOperatorDeclaration":
-      {
-
-      }break;
-
-      case "ConstDeclaration":
-      {
-        ConstDeclaration test = (ConstDeclaration) ast; //Declares it
-        idTable.enter(test.I.spelling, test); //Inserts the declaration into the Identification Table for future use
-        if (test.duplicated)
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, test.position);
-      }break;
-
-      case "FuncDeclaration":
-      {
-        FuncDeclaration test = (FuncDeclaration) ast;
-        test.T = (TypeDenoter) test.visit(this,null);
-        idTable.enter(test.I.spelling, test);
-        if (test.duplicated)
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, test.position);
-      }break;
-
-      case "ProcDeclaration":
-      {
-        ProcDeclaration test = (ProcDeclaration) ast;
-        idTable.enter (test.I.spelling, test); // permits recursion
-        if (test.duplicated)
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, ast.position);
-      }break;
-
-      case "SequentialDeclaration": //Need to test this
-      {
-        SequentialDeclaration test = (SequentialDeclaration) ast;
-        test.visit(this,null);
-      }break;
-
-      case "TypeDeclaration":
-      {
-        TypeDeclaration test = (TypeDeclaration) ast;
-        idTable.enter (test.I.spelling, test);
-        if (test.duplicated)
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, test.position);
-      }break;
-
-      case "UnaryOperatorDeclaration":
-      {
-
-      }break;
-
-      case "visitVarDeclaration":
-      {
-        VarDeclaration test = (VarDeclaration) ast;
-        // test.T = (TypeDenoter) test.T.visit(this, null);
-        idTable.enter (test.I.spelling, test);
-        if (test.duplicated)
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, test.position);
-      }break;
-
-      case "VarInitDeclaration":
-      {
-        VarInitDeclaration test = (VarInitDeclaration) ast;
-        // TypeDenoter eType = (TypeDenoter) test.E.visit(this, null); // Gets the expression type
-        // test.I.type = eType; // Assigns it to the Identifier
-        idTable.enter(test.I.spelling,test); // Inserts the Identifier into the idTable
-        if (test.duplicated) // Checks if the Identifier exists already within the idTable
-          reporter.reportError ("identifier \"%\" already declared",
-                  test.I.spelling, test.position);
-      }break;
-
-      case "LocalDeclaration": //Need to test this
-      {
-        LocalDeclaration test = (LocalDeclaration) ast;
-        test.visit(this,null);
-      }break;
-
-      case "ProcFuncsDeclaration": //Need to test this
-      {
-        ProcFuncDeclaration test = (ProcFuncDeclaration) ast;
-        test.visit(this,null);
-      }break;
-
-
-
-      default: {
-        reporter.reportError("Not an acceptable declaration",declarationType,ast.position);
-      }
-    }
-
-  }
 
     // Array Aggregates
 
@@ -1017,7 +957,12 @@ public final class Checker implements Visitor {
     return ast.type;
   }
 
-  public Object visitSimpleVname(SimpleVname ast, Object o) { //Modify for new declarations
+  /* CAMBIOS NUEVOS PT2
+      Joshua:
+      -visitSimpleVname
+        +Se acepta el uso de VarInit como declaración, se maneja como variable.
+   */
+  public Object visitSimpleVname(SimpleVname ast, Object o) {
     ast.variable = false;
     ast.type = StdEnvironment.errorType;
     Declaration binding = (Declaration) ast.I.visit(this, null);

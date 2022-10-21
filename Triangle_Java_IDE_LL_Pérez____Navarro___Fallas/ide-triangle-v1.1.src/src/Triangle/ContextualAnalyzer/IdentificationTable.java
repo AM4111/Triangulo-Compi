@@ -16,14 +16,18 @@ package Triangle.ContextualAnalyzer;
 
 import Triangle.AbstractSyntaxTrees.Declaration;
 
+import java.util.Stack;
+
 public final class IdentificationTable {
 
   private int level;
   private IdEntry latest;
+  private Stack<IdEntry> IdEntry_Stack;
 
   public IdentificationTable () {
     level = 0;
     latest = null;
+    IdEntry_Stack = new Stack<>();
   }
 
   // Opens a new level in the identification table, 1 higher than the
@@ -31,6 +35,35 @@ public final class IdentificationTable {
 
   public void openScope () {
     level ++;
+  }
+
+
+  // Opens a new stack starting with the latest entry to the id table and
+  // a new level
+  public void openLocalScope () {
+    this.level++;
+    IdEntry_Stack.push(this.latest);
+  }
+
+
+  //Closes the current stack level and empties the stack
+  public void closeLocalScope(){
+    IdEntry current_entry = this.latest , final_entry = this.latest;
+
+    while (current_entry != IdEntry_Stack.peek()){
+      current_entry = current_entry.previous;
+    }
+
+    IdEntry_Stack.pop(); // Gets to the first element ; Everything between D1 and D2
+    current_entry = IdEntry_Stack.peek();
+    final_entry.previous = current_entry;
+    final_entry.level --;
+    this.latest = final_entry;
+    this.level --;
+    IdEntry_Stack.pop();
+  }
+  public void addDeclaration(IdEntry ie){
+    IdEntry_Stack.push(ie);
   }
 
   // Closes the topmost level in the identification table, discarding
@@ -102,6 +135,11 @@ public final class IdentificationTable {
     }
 
     return attr;
+  }
+
+
+  public IdEntry latestEntry() {
+    return this.latest;
   }
 
 }

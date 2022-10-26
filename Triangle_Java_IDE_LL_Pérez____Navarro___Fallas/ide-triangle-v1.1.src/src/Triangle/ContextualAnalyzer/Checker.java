@@ -543,18 +543,18 @@ public final class Checker implements Visitor {
    */
   @Override
   //TODO
-        //LetError3
-        //LetOk3
-       
+
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
 
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null); // Gets the expression type
     ast.I.type = eType; // Assigns it to the Identifier
     idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable
     if (ast.duplicated) // Checks if the Identifier exists already within the idTable
-    {reporter.reportError ("identifier \"%\" already declared",
-              ast.I.spelling, ast.position);
-
+    {
+      idTable.setDeclarationType(ast.I.spelling,ast); //Replaces old declaration
+      ast.duplicated = false;
+      //reporter.reportError ("identifier \"%\" already declared",
+      //        ast.I.spelling, ast.position);
     }
 
     return null;

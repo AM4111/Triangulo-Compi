@@ -139,6 +139,24 @@ public final class IdentificationTable {
   }
 
 
+  // Finds an entry in the IDTable and
+  // sets its type with the given declaration
+  public void setDeclarationType (String id, Declaration newDec){
+    IdEntry entry;
+    boolean searching = true;
+
+    entry = this.latest;
+    while (searching) {
+      if (entry == null)
+        searching = false;
+      else if (entry.id.equals(id)) {
+        searching = false;
+        entry.attr = newDec;
+      } else
+        entry = entry.previous;
+    }
+
+  }
   public IdEntry latestEntry() {
     return this.latest;
   }

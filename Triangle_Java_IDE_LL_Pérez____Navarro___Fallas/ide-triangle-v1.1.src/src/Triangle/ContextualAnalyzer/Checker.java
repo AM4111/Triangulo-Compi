@@ -542,14 +542,20 @@ public final class Checker implements Visitor {
    *     ProcFuncs
    */
   @Override
+  //TODO
+        //LetError3
+        //LetOk3
+       
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
 
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null); // Gets the expression type
     ast.I.type = eType; // Assigns it to the Identifier
     idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable
     if (ast.duplicated) // Checks if the Identifier exists already within the idTable
-      reporter.reportError ("identifier \"%\" already declared",
+    {reporter.reportError ("identifier \"%\" already declared",
               ast.I.spelling, ast.position);
+
+    }
 
     return null;
   }
@@ -581,17 +587,17 @@ public final class Checker implements Visitor {
 
       if (ast.FD != null) {
         ast.FD.T = (TypeDenoter) ast.FD.T.visit(this, null);
-        idTable.enter (ast.FD.I.spelling, ast); // permits recursion
+        idTable.enter (ast.FD.I.spelling, ast.FD); // permits recursion
         if (ast.duplicated)
           reporter.reportError ("identifier \"%\" already declared",
                   ast.FD.I.spelling, ast.position);
         idTable.openScope();
         ast.FD.FPS.visit(this, null);
-        TypeDenoter eType = (TypeDenoter) ast.FD.E.visit(this, null);
+        //TypeDenoter eType = (TypeDenoter) ast.FD.E.visit(this, null);
         idTable.closeScope();
-        if (! ast.FD.T.equals(eType))
-          reporter.reportError ("body of function \"%\" has wrong type",
-                  ast.FD.I.spelling, ast.FD.E.position);
+        //if (! ast.FD.T.equals(eType))
+        //  reporter.reportError ("body of function \"%\" has wrong type",
+        //          ast.FD.I.spelling, ast.FD.E.position);
       }
 
 

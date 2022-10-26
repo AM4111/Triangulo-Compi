@@ -50,13 +50,14 @@ public final class IdentificationTable {
   public void closeLocalScope(){
     IdEntry current_entry = this.latest , final_entry = this.latest;
 
-    while (current_entry != IdEntry_Stack.peek()){
+    while (current_entry.previous != IdEntry_Stack.peek()){ //Gets to the element before D1
       current_entry = current_entry.previous;
     }
 
+
     IdEntry_Stack.pop(); // Gets to the first element ; Everything between D1 and D2
-    current_entry = IdEntry_Stack.peek();
-    final_entry.previous = current_entry;
+    current_entry.previous = IdEntry_Stack.peek();
+
     final_entry.level --;
     this.latest = final_entry;
     this.level --;

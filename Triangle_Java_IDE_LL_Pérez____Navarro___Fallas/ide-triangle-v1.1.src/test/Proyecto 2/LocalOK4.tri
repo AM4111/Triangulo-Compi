@@ -1,0 +1,13 @@
+let
+	local
+		const a ~ 5;
+		var b init 15
+	in
+		var c init a * b * 2 ! a y b visibles aquí­
+	end;
+	var d init 5
+in
+	putint(c + d) ! c y d visibles aquí­
+end
+
+! Ok

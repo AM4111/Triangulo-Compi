@@ -74,7 +74,6 @@ public class IDECompiler {
         } else {
             System.out.println("Compilation was unsuccessful.");
         }
-
         HTMLWriter html = new HTMLWriter(fileSourceName + "html");
         html.write(getAST());
         System.out.println("HTML file generated successfully");

@@ -89,10 +89,6 @@ public final class Checker implements Visitor {
   /* CAMBIOS NUEVOS
       -Verificación de tipo Entero para ambas expresiones
    */
-
-  /* TODO
-   *      Insertar el identificador como declaración
-   * */
   public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o){
     // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
@@ -105,21 +101,14 @@ public final class Checker implements Visitor {
       reporter.reportError(
               "Integer expected here", "", ast.E2.position); //Nuevo Error
 
-
     // Comando
     idTable.openScope();
-    /*ast.I.type = eType1; // Assigns it to the Identifier
-    idTable.enter(ast.I.spelling,ast); // Inserts the Identifier into the idTable, needs to be a declaration?*/
-
-    Declaration binding = (Declaration) ast.I.visit(this, null); // Check if I is declared
-    if (binding == null)
-      reportUndeclared(ast.I);
-    else
-      reporter.reportError("\"%\" is not a procedure identifier",
-              ast.I.spelling, ast.I.position);
+    //Declaration, within the scope of the Command
+    ConstDeclaration loopDec = new ConstDeclaration(ast.I, ast.E1, null);
+    loopDec.visit(this,null);
+    idTable.enter(ast.I.spelling,loopDec);
 
     ast.C.visit(this, null); //Command verification
-
     idTable.closeScope();
     return null;
   }
@@ -131,17 +120,9 @@ public final class Checker implements Visitor {
       -Verificación de tipo Booleano para Exp3
       -Se agrega un error para las expresiones de enteros.
    */
-  /*TODO
-  *    Insertar el identificador como declaración
-  * */
+
   public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o){
-    // Identificador
-    Declaration binding = (Declaration) ast.I.visit(this, null);
-    if (binding == null)
-      reportUndeclared(ast.I);
-    else
-      reporter.reportError("\"%\" is not a procedure identifier",
-                           ast.I.spelling, ast.I.position);
+
     // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
     if (! eType1.equals(StdEnvironment.integerType))
@@ -152,13 +133,22 @@ public final class Checker implements Visitor {
     if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
               "Integer expression expected here", "", ast.E2.position); //Nuevo Error
-    // Expresion 3
+
+    // Comando
+    idTable.openScope();
+    //Declaration, within the scope of the Command
+    ConstDeclaration loopDec = new ConstDeclaration(ast.I, ast.E1, null);
+    loopDec.visit(this,null);
+    idTable.enter(ast.I.spelling,loopDec);
+
+    // Expresion 3; ve a la declaración de id
     TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
     if (! eType3.equals(StdEnvironment.booleanType))
       reporter.reportError(
               "Boolean expression expected here", "", ast.E3.position);
-    // Comando
-    ast.C.visit(this, null);
+
+    ast.C.visit(this, null); //Command verification
+    idTable.closeScope();
     return null;
   }
 
@@ -169,18 +159,8 @@ public final class Checker implements Visitor {
       -Verificación de tipo Booleano para Exp3
       -Se agrega un error para las expresiones de enteros.
    */
-    /*TODO
-     *    Insertar el identificador como declaración
-     * */
+
   public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o){
-      //Identificador
-      //idTable.enter(ast.I.spelling,);
-    Declaration binding = (Declaration) ast.I.visit(this, null);
-    if (binding == null)
-      reportUndeclared(ast.I);
-    else
-      reporter.reportError("\"%\" is not a procedure identifier",
-                           ast.I.spelling, ast.I.position);
     // Expresion 1; Verifica que sea de tipo entero
     TypeDenoter eType1 = (TypeDenoter) ast.E1.visit(this, null);
     if (! eType1.equals(StdEnvironment.integerType))
@@ -191,13 +171,22 @@ public final class Checker implements Visitor {
     if (! eType2.equals(StdEnvironment.integerType))
       reporter.reportError(
               "Integer expected here", "", ast.E2.position); //Nuevo Error
-    // Expresion 3
+
+    // Comando
+    idTable.openScope();
+    //Declaration, within the scope of the Command
+    ConstDeclaration loopDec = new ConstDeclaration(ast.I, ast.E1, null);
+    loopDec.visit(this,null);
+    idTable.enter(ast.I.spelling,loopDec);
+
+    // Expresion 3; Tiene acceso a la declaración del loop
     TypeDenoter eType3 = (TypeDenoter) ast.E3.visit(this, null);
     if (! eType3.equals(StdEnvironment.booleanType))
       reporter.reportError(
               "Boolean expression expected here", "", ast.E3.position);
-    // Comando
-    ast.C.visit(this, null);
+
+    ast.C.visit(this, null); //Command verification
+    idTable.closeScope();
     return null;
   }
   
@@ -542,8 +531,6 @@ public final class Checker implements Visitor {
    *     ProcFuncs
    */
   @Override
-  //TODO
-
   public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
 
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null); // Gets the expression type

@@ -168,7 +168,7 @@ public final class Encoder implements Visitor {
         return null;
     }
 
-    /* CAMBIOS NUEVOS Parte 1
+    /* CAMBIOS NUEVOS Parte 1 
    * Autores: Joshua Arcia
       -visitRestOfIfCommand
       -Modificación de if para que sea con rest of if
@@ -195,18 +195,47 @@ public final class Encoder implements Visitor {
         return null;
     }
 
-    @Override
+    /* CAMBIOS NUEVOS Parte 3 
+        * Autores: Joshua Arcia, Paula Bustos y Max Lee
+        -while do
+        -do while
+        -until do
+        -do until
+    */
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        // almacena la direccion de la siguiente instruccion 
+        // tanto del ciclo y al salto para repetir
+        int jumpAddr, loopAddr;
+        jumpAddr = nextInstrAddr;
+        // guardando el salto
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        // cambia la instruccion actual al salto para repetir el do
+        patch(jumpAddr, nextInstrAddr);
+        ast.E.visit(this, frame);
+        // trueRep => repite hasta que la expresion sea falsa
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+        return null;
     }
 
     @Override
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Similar al anterior pero sin tener que guardar el inicio del do
+        // po lo que no ocupa el jumpAddr y su manejo de direccion
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+        return null;
     }
 
     @Override
     public Object visitLoopUntilDoCommand(LoopUntilDoCommand ast, Object o) {
+        // Similar al while do
         Frame frame = (Frame) o;
         int jumpAddr, loopAddr;
         jumpAddr = nextInstrAddr;
@@ -215,13 +244,21 @@ public final class Encoder implements Visitor {
         ast.C.visit(this, frame);
         patch(jumpAddr, nextInstrAddr);
         ast.E.visit(this, frame);
+        // falseRep => no repite
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
         return null;
     }
 
     @Override
     public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Similar al do while
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+        return null;
     }
 
     @Override
@@ -436,7 +473,7 @@ public final class Encoder implements Visitor {
     }
 
     /* CAMBIOS NUEVOS Parte 1
-   * Autores: Joshua Arcia
+   * Autores: Joshua Arcia y Max Lee 
       -VisitVarInitDeclaration
       -VisitLocalDeclaration
       -VisitProcFuncsDeclaration
@@ -444,7 +481,16 @@ public final class Encoder implements Visitor {
      */
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
-        return null;
+        // Igual que var declaration? 
+        // TODO
+        Frame frame = (Frame) o;
+        int extraSize;
+
+        extraSize = ((Integer) ast.E.visit(this, null)).intValue();
+        emit(Machine.PUSHop, 0, 0, extraSize);
+        ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+        writeTableDetails(ast);
+        return new Integer(extraSize);
     }
 
     @Override

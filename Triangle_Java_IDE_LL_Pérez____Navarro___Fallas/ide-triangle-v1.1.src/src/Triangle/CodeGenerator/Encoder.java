@@ -128,11 +128,10 @@ public final class Encoder implements Visitor {
         jumpifAddr = nextInstrAddr;
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
         ast.C1.visit(this, frame);
-
         jumpAddr = nextInstrAddr;
         emit(Machine.JUMPop, Machine.falseRep, Machine.CBr, 0);
         patch(jumpifAddr, nextInstrAddr);
-        ast.ROI1.visit(this, frame);
+        ast.ROI1.visit(this, frame); //Adentro está el comando que se hace cuando se termina el programa
         patch(jumpAddr, nextInstrAddr);
         return null;
     }
@@ -178,15 +177,15 @@ public final class Encoder implements Visitor {
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
         //Frame frame = (Frame) o;
         int  jumpAddr;
-        ast.C1.visit(this, o);
-        jumpAddr = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+
         if (ast.BC1 != null)
         {
             ast.BC1.visit(this, o);
-            patch(jumpAddr, nextInstrAddr);
         }
-        patch(jumpAddr, nextInstrAddr);
+            ast.C1.visit(this, o); // Comando del primer if
+            jumpAddr = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            patch(jumpAddr, nextInstrAddr);
         return null;
     }
 
@@ -194,11 +193,14 @@ public final class Encoder implements Visitor {
     public Object visitBarCommand(BarCommand ast, Object o) {
         //Frame frame = (Frame) o;
         int jumpifAddr, jumpAddr;
+
         Integer valSize = (Integer) ast.E1.visit(this, o);
         jumpifAddr = nextInstrAddr;
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
+
         ast.C1.visit(this, o);
         jumpAddr = nextInstrAddr;
+
         emit(Machine.JUMPop, 0, Machine.CBr, 0);
         if (ast.BC1 != null)
         {

@@ -201,7 +201,7 @@ public final class Encoder implements Visitor {
         -do while
         -until do
         -do until
-    */
+     */
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) {
         Frame frame = (Frame) o;
         // almacena la direccion de la siguiente instruccion 
@@ -263,17 +263,76 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /*Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E1.visit(this, frame);
+        ast.E2.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);*/
+        Frame frame1 = (Frame) o;
+        int loopAddr, jumpAddr, varForControl, extraSize1, extraSize2;
+        extraSize1 = (Integer) ast.E2.visit(this, frame1);
+        Frame frame2 = new Frame(frame1, extraSize1);
+        varForControl = nextInstrAddr;
+        extraSize2 = (Integer) ast.E1.visit(this, frame2);
+
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1);
+        loopAddr = nextInstrAddr;
+
+        ast.C.visit(this, frame3);
+        emit(Machine.CALLop, varForControl, Machine.PBr, Machine.succDisplacement);
+        patch(jumpAddr, nextInstrAddr);
+        emit(Machine.LOADAop, extraSize1 + extraSize2, Machine.STr, -2);
+        emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.getDisplacement);
+
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+
+        return null;
     }
 
     @Override
     public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame1 = (Frame) o;
+        int loopAddr, jumpAddr, varForControl, extraSize1, extraSize2;
+        extraSize1 = (Integer) ast.E2.visit(this, frame1);
+        Frame frame2 = new Frame(frame1, extraSize1);
+        varForControl = nextInstrAddr;
+        extraSize2 = (Integer) ast.E1.visit(this, frame2);
+
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1);
+        loopAddr = nextInstrAddr;
+
+        ast.C.visit(this, frame3);
+        emit(Machine.CALLop, varForControl, Machine.PBr, Machine.succDisplacement);
+        patch(jumpAddr, nextInstrAddr);
+        emit(Machine.LOADAop, extraSize1 + extraSize2, Machine.STr, -2);
+        emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.getDisplacement);
+
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+
+        emit(Machine.POPop, 0, 0, extraSize1 + extraSize2);
+
+        /*Frame frame = (Frame) o;
+        int jumpAddr, loopAddr;
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        patch(jumpAddr, nextInstrAddr);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);*/
+        return null;
     }
 
     @Override
     public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        return null;
     }
 
     // Expressions
@@ -486,7 +545,7 @@ public final class Encoder implements Visitor {
         Frame frame = (Frame) o;
         int extraSize;
 
-        extraSize = ((Integer) ast.E.visit(this, null)).intValue();
+        extraSize = ((Integer) ast.E.visit(this, frame)).intValue();
         emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
@@ -495,12 +554,34 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        return null;
+        Frame frame1 = (Frame) o;
+        Frame frame2 = (Frame) o;
+        int extraSize1, extraSize2;
+        extraSize1 = ((Integer) ast.D1.visit(this, frame1)).intValue();
+        extraSize2 = ((Integer) ast.D2.visit(this, frame2)).intValue() + extraSize1;
+        return new Integer(extraSize2);
     }
 
     @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
-        return null;
+        Frame frame1 = (Frame) o;
+        Frame frame2 = (Frame) o;
+        int extraSize1 = 0;
+        int extraSize2 = 0;
+        if (ast.PD != null) {
+            extraSize1 = ((Integer) ast.PD.visit(this, frame1)).intValue();
+            ast.PD.visit(this, null);
+            if (ast.PF != null) {
+                extraSize2 = ((Integer) ast.PF.visit(this, frame2)).intValue() + extraSize1;
+            }
+        }
+        if (ast.PF != null) {
+            extraSize1 = ((Integer) ast.PF.visit(this, frame2)).intValue();
+            if (ast.PF != null) {
+                extraSize2 = ((Integer) ast.PF.visit(this, frame2)).intValue() + extraSize1;
+            }
+        }
+        return extraSize2;
     }
 
     // Array Aggregates

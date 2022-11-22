@@ -131,7 +131,7 @@ public final class Encoder implements Visitor {
         jumpAddr = nextInstrAddr;
         emit(Machine.JUMPop, Machine.falseRep, Machine.CBr, 0);
         patch(jumpifAddr, nextInstrAddr);
-        ast.ROI1.visit(this, frame); //Adentro está el comando que se hace cuando se termina el programa
+        ast.ROI1.visit(this, frame); //Adentro está el comando del else
         patch(jumpAddr, nextInstrAddr);
         return null;
     }
@@ -175,12 +175,12 @@ public final class Encoder implements Visitor {
      */
     @Override
     public Object visitRestOfIfCommand(RestOfIf ast, Object o) {
-        //Frame frame = (Frame) o;
+        Frame frame = (Frame) o;
         int  jumpAddr;
 
         if (ast.BC1 != null)
         {
-            ast.BC1.visit(this, o);
+            ast.BC1.visit(this, frame);
         }
             ast.C1.visit(this, o); // Comando del primer if
             jumpAddr = nextInstrAddr;
@@ -191,24 +191,22 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitBarCommand(BarCommand ast, Object o) {
-        //Frame frame = (Frame) o;
+        Frame frame = (Frame) o;
         int jumpifAddr, jumpAddr;
+        Integer valSize = (Integer) ast.E1.visit(this,frame); //Load and call eq
+        jumpifAddr = nextInstrAddr; //Get next instruction address, where to go if the instruction is false
+        emit(Machine.JUMPIFop,Machine.falseRep,Machine.CBr,0); //Jumps to the next address, if patched, the command is useless
 
-        Integer valSize = (Integer) ast.E1.visit(this, o);
-        jumpifAddr = nextInstrAddr;
-        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
-
-        ast.C1.visit(this, o);
+        ast.C1.visit(this,frame); // Writes the command that needs to be done
+        emit(Machine.HALTop,Machine.falseRep,Machine.CBr,0);
         jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop,Machine.falseRep,Machine.CBr,0);
+        patch(jumpifAddr,nextInstrAddr);
+        patch(jumpAddr,nextInstrAddr);
 
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        if (ast.BC1 != null)
-        {
-            ast.BC1.visit(this, o);
-            patch(jumpAddr, nextInstrAddr);
+        if (ast.BC1 != null){
+            ast.BC1.visit(this,frame);
         }
-        patch(jumpifAddr, nextInstrAddr);
-        patch(jumpAddr, nextInstrAddr);
         return null;
     }
 

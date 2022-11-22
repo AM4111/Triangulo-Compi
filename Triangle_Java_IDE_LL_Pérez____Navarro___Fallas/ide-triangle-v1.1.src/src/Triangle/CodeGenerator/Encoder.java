@@ -570,38 +570,52 @@ public final class Encoder implements Visitor {
         // Probablemente jajaja
         // TODO
         Frame frame = (Frame) o;
+        
         int extraSize;
-
+        // Define el espacio extra que debe de consumir la expresion a evaluar
         extraSize = ((Integer) ast.E.visit(this, frame)).intValue();
+        // Realiza el espacio de la expresion 
         emit(Machine.PUSHop, 0, 0, extraSize);
+        // Settea el valor de direccion de esta expresion
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+        // Escribe en la tabla el valor de la expresion 
         writeTableDetails(ast);
         return extraSize;
     }
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        // Crear dos espacios para cada declaracion
         Frame frame1 = (Frame) o;
         Frame frame2 = (Frame) o;
+        // Declarar las variables de los espacios extra de cada declaracion
         int extraSize1, extraSize2;
+        // Guarda el tamannio de la 1era declaracion
         extraSize1 = ((Integer) ast.D1.visit(this, frame1)).intValue();
+        // Guarda el tamannio de la 2da declaracion
         extraSize2 = ((Integer) ast.D2.visit(this, frame2)).intValue() + extraSize1;
+        // Devuelve el tamannio de la cantidad a guardar.
         return new Integer(extraSize2);
     }
 
     @Override
     public Object visitProcFuncsDeclaration(ProcFuncDeclaration ast, Object o) {
+        // Crear dos espacios para el proc y func
         Frame frame1 = (Frame) o;
         Frame frame2 = (Frame) o;
+        // Declarar las variables de los espacios extra de cada declaracion
         int extraSize1 = 0;
         int extraSize2 = 0;
         if (ast.PD != null) {
+            // Guarda el tamannio de la 1era declaracion
             extraSize1 = ((Integer) ast.PD.visit(this, frame1)).intValue();
             ast.PD.visit(this, null);
             if (ast.PF != null) {
+                // Guarda el tamannio de la 2da declaracion
                 extraSize2 = ((Integer) ast.PF.visit(this, frame2)).intValue() + extraSize1;
             }
         }
+        // Mismo proceso
         if (ast.PF != null) {
             extraSize1 = ((Integer) ast.PF.visit(this, frame2)).intValue();
             if (ast.PF != null) {
@@ -993,7 +1007,8 @@ public final class Encoder implements Visitor {
     private void elaborateStdConst(Declaration constDeclaration,
                                    int value) {
 
-        if (constDeclaration instanceof ConstDeclaration decl) {
+        if (constDeclaration instanceof ConstDeclaration) {
+            ConstDeclaration decl = (ConstDeclaration) constDeclaration;
             int typeSize = ((Integer) decl.E.type.visit(this, null)).intValue();
             decl.entity = new KnownValue(typeSize, value);
             writeTableDetails(constDeclaration);

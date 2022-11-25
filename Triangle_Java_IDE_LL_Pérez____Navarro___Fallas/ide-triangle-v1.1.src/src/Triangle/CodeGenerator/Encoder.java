@@ -227,6 +227,7 @@ public final class Encoder implements Visitor {
         -do while
         -until do
         -do until
+        -For from to do
      */
     public Object visitLoopWhileDoCommand(LoopWhileDoCommand ast, Object o) {
         Frame frame = (Frame) o;
@@ -291,7 +292,6 @@ public final class Encoder implements Visitor {
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) {
 
         int jumpAddr, extraSize1, extraSize2,left_of_to_adress,right_of_to_adress;
-
         //ast.I.visit(this,o); // loop for _variable_, no se puede usar por que no aparece como declarada
         Frame frame1 = (Frame) o;
         right_of_to_adress = nextInstrAddr;

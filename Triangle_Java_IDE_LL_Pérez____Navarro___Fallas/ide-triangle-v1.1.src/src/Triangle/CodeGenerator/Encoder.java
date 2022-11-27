@@ -291,8 +291,8 @@ public final class Encoder implements Visitor {
     @Override
     public Object visitLoopForFromToDoCommand(LoopForFromToDoCommand ast, Object o) {
 
-        int jumpAddr, extraSize1, extraSize2,left_of_to_adress,right_of_to_adress;
-        //ast.I.visit(this,o); // loop for _variable_, no se puede usar por que no aparece como declarada
+        int jumpAddr, extraSize1, extraSize2, extraSize3, left_of_to_adress,right_of_to_adress;
+
         Frame frame1 = (Frame) o;
         right_of_to_adress = nextInstrAddr;
         extraSize1 = (Integer) ast.E2.visit(this, frame1); // Expresión derecha del to
@@ -300,17 +300,26 @@ public final class Encoder implements Visitor {
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
 
 
+
         Frame frame2 = new Frame(frame1, extraSize1);
         left_of_to_adress = nextInstrAddr;
         extraSize2 = (Integer) ast.E1.visit(this, frame2); // Expresión izquierda del to
         emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresión de la izquierda
-        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement);
 
-        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1);
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
+
+        extraSize3 = (Integer) ast.I.decl.visit(this,o); // loop for _variable_; pushed to stack base
+
+        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1 + extraSize3 );
+
 
         jumpAddr = nextInstrAddr;
         ast.C.visit(this,frame3);
 
+        emit(Machine.LOADop,1,Machine.SBr,0); //Carga la base del stack
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); //Suma 1
+        emit(Machine.STOREop,1,Machine.SBr,0); //Lo sobre escribe
 
         emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la Expresión de la izquierda del to
         emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); // Suma 1 a la expresión
@@ -319,6 +328,7 @@ public final class Encoder implements Visitor {
         emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la expresión de la izquierda del to
         emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresión de la derecha del to
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
         emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.gtDisplacement); //Verifica que la de la derecha sea mayor
         emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,jumpAddr); //Si no es mayor, se termina el ciclo
 

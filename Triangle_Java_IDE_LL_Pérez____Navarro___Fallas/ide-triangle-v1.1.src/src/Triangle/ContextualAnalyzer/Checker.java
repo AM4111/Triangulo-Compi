@@ -140,8 +140,9 @@ public final class Checker implements Visitor {
     // Comando
     idTable.openScope();
     //Declaration, within the scope of the Command
-    ConstDeclaration loopDec = new ConstDeclaration(ast.I, ast.E1, null);
+    VarDeclaration loopDec = new VarDeclaration(ast.I, ast.E1.type, null);
     loopDec.visit(this,null);
+    ast.I.decl = loopDec;
     idTable.enter(ast.I.spelling,loopDec);
 
     // Expresion 3; ve a la declaración de id
@@ -178,8 +179,9 @@ public final class Checker implements Visitor {
     // Comando
     idTable.openScope();
     //Declaration, within the scope of the Command
-    ConstDeclaration loopDec = new ConstDeclaration(ast.I, ast.E1, null);
+    VarDeclaration loopDec = new VarDeclaration(ast.I, ast.E1.type, null);
     loopDec.visit(this,null);
+    ast.I.decl = loopDec;
     idTable.enter(ast.I.spelling,loopDec);
 
     // Expresion 3; Tiene acceso a la declaración del loop

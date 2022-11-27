@@ -299,15 +299,11 @@ public final class Encoder implements Visitor {
         emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); //Guarda el valor original de la expresión de la derecha
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
 
-
-
         Frame frame2 = new Frame(frame1, extraSize1);
         left_of_to_adress = nextInstrAddr;
         extraSize2 = (Integer) ast.E1.visit(this, frame2); // Expresión izquierda del to
         emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresión de la izquierda
-
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
-
 
         extraSize3 = (Integer) ast.I.decl.visit(this,o); // loop for _variable_; pushed to stack base
 
@@ -373,7 +369,41 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) {
-        Frame frame = (Frame) o;
+        Frame frame1 = (Frame) o;
+        int extraSize1, extraSize2, extraSize3, extraSize4, right_of_to_adress, left_of_to_adress, endAdrr,third_control_address;
+
+        right_of_to_adress = nextInstrAddr;
+        extraSize1 = (Integer) ast.E2.visit(this, frame1); // Expresión derecha del to
+        emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); //Guarda el valor original de la expresión de la derecha
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
+        Frame frame2 = new Frame(frame1, extraSize1);
+        left_of_to_adress = nextInstrAddr;
+        extraSize2 = (Integer) ast.E1.visit(this, frame2); // Expresión izquierda del to
+        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresión de la izquierda
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
+        extraSize3 = (Integer) ast.I.decl.visit(this,o); // loop for _variable_; pushed to stack base
+        Frame frame3 = new Frame(frame2, extraSize2 );
+
+        third_control_address = nextInstrAddr;
+
+        Frame frame4 = new Frame(frame1,extraSize1+extraSize2+extraSize3);
+        
+        ast.C.visit(this,frame4);
+
+        emit(Machine.LOADop,1,Machine.SBr,1);
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement);
+        emit(Machine.STOREop,1,Machine.SBr,1);
+
+        extraSize4 = (Integer) ast.E3.visit(this,frame3);
+        emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,third_control_address);
+
+        endAdrr = nextInstrAddr;
+
+
+
+
         return null;
     }
 

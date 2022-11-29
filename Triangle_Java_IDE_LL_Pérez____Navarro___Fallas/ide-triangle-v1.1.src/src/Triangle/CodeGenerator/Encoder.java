@@ -333,75 +333,116 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLoopForFromToWhileDoCommand(LoopForFromToWhileDoCommand ast, Object o) {
+        
+        int jumpAddr, extraSize1, extraSize2, extraSize3, left_of_to_adress,right_of_to_adress;
+
         Frame frame1 = (Frame) o;
-        int loopAddr, jumpAddr, varForControl, extraSize1, extraSize2;
-        extraSize1 = (Integer) ast.E2.visit(this, frame1);
+        right_of_to_adress = nextInstrAddr;
+        extraSize1 = (Integer) ast.E1.visit(this, frame1); // Expresion derecha del to
+        emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); //Guarda el valor original de la expresion de la derecha
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
         Frame frame2 = new Frame(frame1, extraSize1);
-        varForControl = nextInstrAddr;
-        extraSize2 = (Integer) ast.E1.visit(this, frame2);
+        
+        left_of_to_adress = nextInstrAddr;
+        extraSize2 = (Integer) ast.E2.visit(this, frame2); // Expresion izquierda del to
+        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresion de la izquierda
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
+        extraSize3 = (Integer) ast.I.decl.visit(this,o); // loop for _variable_; pushed to stack base
+
+        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1 + extraSize3 );
+
 
         jumpAddr = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1);
-        loopAddr = nextInstrAddr;
+        ast.C.visit(this,frame3);
 
+        emit(Machine.LOADop,1,Machine.SBr,0); //Carga la base del stack
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); //Suma 1
+        emit(Machine.STOREop,1,Machine.SBr,0); //Lo sobre escribe
+
+        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la Expresion de la izquierda del to
+        
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); // Suma 1 a la expresion
+        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Lo sobre escribe
+
+        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la expresion de la izquierda del to
+        
+        int jumpAddrW, loopAddrW;
+
+        jumpAddrW = nextInstrAddr;
+        // guardando el salto
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        loopAddrW = nextInstrAddr;
+        ast.E3.visit(this, frame3);
+        // cambia la instruccion actual al salto para repetir el do
+        patch(jumpAddrW, nextInstrAddr);
         ast.C.visit(this, frame3);
-        emit(Machine.CALLop, varForControl, Machine.PBr, Machine.succDisplacement);
-        patch(jumpAddr, nextInstrAddr);
-        emit(Machine.LOADAop, extraSize1 + extraSize2, Machine.STr, -2);
-        emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.getDisplacement);
+        // trueRep => repite hasta que la expresion sea falsa
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddrW);
+        
+        
+        emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresion de la derecha del to
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
 
-        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.gtDisplacement); //Verifica que la de la derecha sea mayor
+        emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,jumpAddr); //Si no es mayor, se termina el ciclo
 
-        emit(Machine.POPop, 0, 0, extraSize1 + extraSize2);
 
-        /*Frame frame = (Frame) o;
-        int jumpAddr, loopAddr;
-        jumpAddr = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        loopAddr = nextInstrAddr;
-        ast.C.visit(this, frame);
-        patch(jumpAddr, nextInstrAddr);
-        ast.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);*/
         return null;
     }
 
     @Override
     public Object visitLoopForFromToUntilDoCommand(LoopForFromToUntilDoCommand ast, Object o) {
-        Frame frame1 = (Frame) o;
-        int extraSize1, extraSize2, extraSize3, extraSize4, right_of_to_adress, left_of_to_adress, endAdrr,third_control_address;
+                int jumpAddr, extraSize1, extraSize2, extraSize3, left_of_to_adress,right_of_to_adress;
 
+        Frame frame1 = (Frame) o;
         right_of_to_adress = nextInstrAddr;
-        extraSize1 = (Integer) ast.E2.visit(this, frame1); // Expresión derecha del to
-        emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); //Guarda el valor original de la expresión de la derecha
+        extraSize1 = (Integer) ast.E1.visit(this, frame1); // Expresion derecha del to
+        emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); //Guarda el valor original de la expresion de la derecha
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
 
         Frame frame2 = new Frame(frame1, extraSize1);
+        
         left_of_to_adress = nextInstrAddr;
-        extraSize2 = (Integer) ast.E1.visit(this, frame2); // Expresión izquierda del to
-        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresión de la izquierda
+        extraSize2 = (Integer) ast.E2.visit(this, frame2); // Expresion izquierda del to
+        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Guarda el valor original de la expresion de la izquierda
         //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
 
         extraSize3 = (Integer) ast.I.decl.visit(this,o); // loop for _variable_; pushed to stack base
-        Frame frame3 = new Frame(frame2, extraSize2 );
 
-        third_control_address = nextInstrAddr;
-
-        Frame frame4 = new Frame(frame1,extraSize1+extraSize2+extraSize3);
-        
-        ast.C.visit(this,frame4);
-
-        emit(Machine.LOADop,1,Machine.SBr,1);
-        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement);
-        emit(Machine.STOREop,1,Machine.SBr,1);
-
-        extraSize4 = (Integer) ast.E3.visit(this,frame3);
-        emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,third_control_address);
-
-        endAdrr = nextInstrAddr;
+        Frame frame3 = new Frame(frame1, extraSize2 + extraSize1 + extraSize3 );
 
 
+        jumpAddr = nextInstrAddr;
+        ast.C.visit(this,frame3);
+
+        emit(Machine.LOADop,1,Machine.SBr,0); //Carga la base del stack
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); //Suma 1
+        emit(Machine.STOREop,1,Machine.SBr,0); //Lo sobre escribe
+
+        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la Expresion de la izquierda del to
+
+        //Until
+        int jumpAddrU, loopAddrU;
+        jumpAddrU = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        loopAddrU = nextInstrAddr;
+        ast.E3.visit(this, frame3);
+        patch(jumpAddrU, nextInstrAddr);
+        ast.C.visit(this, frame3);
+        // falseRep => no repite
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddrU);
+
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); // Suma 1 a la expresion
+        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Lo sobre escribe
+
+        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la expresion de la izquierda del to
+        emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresion de la derecha del to
+        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
+
+        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.gtDisplacement); //Verifica que la de la derecha sea mayor
+        emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,jumpAddr); //Si no es mayor, se termina el ciclo
 
 
         return null;

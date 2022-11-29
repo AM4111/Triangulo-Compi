@@ -1,13 +1,9 @@
 let
-  var a := 15
+  var a init 15
 in
-  repeat  
+  loop  
   while a > 16 do
-
     putint(a) ; ! Ejecución vací­a: NO debe imprimir
     a := a - 1
-
   end
-
 end
-

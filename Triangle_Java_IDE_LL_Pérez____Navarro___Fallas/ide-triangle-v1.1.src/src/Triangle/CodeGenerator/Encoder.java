@@ -679,8 +679,7 @@ public final class Encoder implements Visitor {
      */
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
-        // Igual que var declaration?
-        // Probablemente jajaja
+        // Igual que var declaration pero usando la expresion a evaluar
         // TODO
         Frame frame = (Frame) o;
         
@@ -698,13 +697,18 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        // Crear dos espacios para cada declaracion
-        Frame frame1 = (Frame) o;
-        Frame frame2 = (Frame) o;
         // Declarar las variables de los espacios extra de cada declaracion
         int extraSize1, extraSize2;
+        
+        // Crear el cuadro de la primera declaracion
+        Frame frame1 = (Frame) o;
+        
         // Guarda el tamannio de la 1era declaracion
         extraSize1 = ((Integer) ast.D1.visit(this, frame1)).intValue();
+        
+        // Crear el cuadro de la primera declaracion sumando el tamannio del anterior
+        Frame frame2 = new Frame(frame1, extraSize1);
+        
         // Guarda el tamannio de la 2da declaracion
         extraSize2 = ((Integer) ast.D2.visit(this, frame2)).intValue() + extraSize1;
         // Devuelve el tamannio de la cantidad a guardar.

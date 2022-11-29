@@ -3,8 +3,8 @@ let
   var a : Integer
 
 in
-  a := 0 ;
-  a := a + 1 ;
+  a := 1 ;
+  a := a + 2 ;
   putint (a) ! imprime 1
 
 end 

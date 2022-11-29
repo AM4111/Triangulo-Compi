@@ -1,4 +1,4 @@
-loop for i from 1 to 10 do
+loop for i from 2 to 10 do
 
     putint (i) ! debe imprimir del 1 al 10
 

@@ -1,4 +1,4 @@
-loop for i from 1 to 10 while i < 3 do
+loop for i from 1 to 10 while i < 10 do
 
     putint (i) ! debe imprimir del 1 al 2
 

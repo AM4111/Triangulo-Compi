@@ -4,7 +4,7 @@ let
 
 in
 
-  loop for i from 1 to k while i < 3 do ! determinar que k se evalúa una sola vez
+  loop for i from 1 to k while i < 10 do ! determinar que k se evalúa una sola vez
 
     k := k + 1 ; 
 

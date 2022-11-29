@@ -1,0 +1,16 @@
+let
+	local
+		const a ~ 5; ! 5
+		var b init 15 ! 15
+	in
+		var c init a * b * 2 ! 150, a y b visibles aquí­
+	end;
+	var d init 5 ! 5
+in
+	putint(c + d) ! 155, c y d visibles aquí­
+end
+
+! Ok
+
+! La salida debe lucir así:
+! 155

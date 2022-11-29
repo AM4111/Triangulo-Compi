@@ -1,0 +1,8 @@
+loop for i from 1 to 10 do ! acceso a variable de control
+
+    putint (i) ! debe imprimir del 1 al 10, con salto de línea entre cada número impreso
+    ;
+    puteol()
+
+end
+

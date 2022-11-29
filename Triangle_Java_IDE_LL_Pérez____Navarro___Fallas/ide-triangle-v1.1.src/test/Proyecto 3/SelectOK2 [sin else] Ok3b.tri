@@ -1,0 +1,7 @@
+select '1' from 
+
+  when '4' then putint (2)
+
+  when '1' then putint (12) ! colocado como segunda opción
+
+end

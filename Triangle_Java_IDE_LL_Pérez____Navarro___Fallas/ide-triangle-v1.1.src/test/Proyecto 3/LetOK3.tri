@@ -1,0 +1,18 @@
+!  lets anidados 
+let
+
+  var a init 1 ! debe inferir que a : Integer
+
+in
+
+  let
+    const b ~ a ; ! a es visible aquí, b es UnknownValue
+    var   a init b + 1 ! debe inferir que nueva a : Integer
+  in
+    putint (a) ! debe imprimir 2
+  end
+
+end
+ 
+
+

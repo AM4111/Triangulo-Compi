@@ -1,0 +1,1 @@
+nil ; put('Z') ! debe imprimir Z y terminar con HALT

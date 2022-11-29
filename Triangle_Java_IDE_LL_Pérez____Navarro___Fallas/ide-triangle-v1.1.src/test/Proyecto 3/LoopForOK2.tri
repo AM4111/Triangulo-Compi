@@ -1,0 +1,15 @@
+let
+
+  var k init 8
+
+in
+
+  loop for i from 1 to k do ! determinar que k se evalúa una sola vez
+
+    k := k + 1 ; 
+
+    putint (1) ! debe imprimir 8 veces 1, sin saltar de línea
+
+  end
+
+end

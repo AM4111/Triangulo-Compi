@@ -680,7 +680,6 @@ public final class Encoder implements Visitor {
     @Override
     public Object visitVarInitDeclaration(VarInitDeclaration ast, Object o) {
         // Igual que var declaration pero usando la expresion a evaluar
-        // TODO
         Frame frame = (Frame) o;
         
         int extraSize;

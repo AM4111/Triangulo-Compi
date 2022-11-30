@@ -362,59 +362,16 @@ public final class Encoder implements Visitor {
         exitAddr = nextInstrAddr;
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
         
-        //commandAddr = nextInstrAddr;
         ast.C.visit(this,frame3);
-        
-        
         
         emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresión de la izquierda del to
         emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); //Suma 1
         emit(Machine.STOREop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresión de la izquierda del to
-        
-        //emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); //Carga la base del stack
-        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
-        
         emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresión de la izquierda del to
         emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la Expresión de la derecha del to
         emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.gtDisplacement); //Verifica que la de la derecha sea mayor
-        
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, jumpAddr);
-        
         patch(exitAddr, nextInstrAddr);
-        
-        //patch(jumpAddr, nextInstrAddr);
-        
-
-        /*emit(Machine.LOADop,1,Machine.SBr,0); //Carga la base del stack
-        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); //Suma 1
-        emit(Machine.STOREop,1,Machine.SBr,0); //Lo sobre escribe
-
-        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la Expresion de la izquierda del to
-        
-        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.succDisplacement); // Suma 1 a la expresion
-        emit(Machine.STOREop,extraSize2,Machine.CTr,left_of_to_adress); //Lo sobre escribe
-
-        emit(Machine.LOADop,extraSize2,Machine.CTr,left_of_to_adress); // Carga la expresion de la izquierda del to
-        
-        int jumpAddrW, loopAddrW;
-
-        jumpAddrW = nextInstrAddr;
-        // guardando el salto
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        loopAddrW = nextInstrAddr;
-        ast.E3.visit(this, frame3);
-        // cambia la instruccion actual al salto para repetir el do
-        patch(jumpAddrW, nextInstrAddr);
-        ast.C.visit(this, frame3);
-        // trueRep => repite hasta que la expresion sea falsa
-        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddrW);
-        
-        
-        emit(Machine.LOADop,extraSize1,Machine.CTr,right_of_to_adress); // Carga la Expresion de la derecha del to
-        //emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.putintDisplacement); //Para debuggear
-
-        emit(Machine.CALLop,Machine.SBr,Machine.PBr,Machine.gtDisplacement); //Verifica que la de la derecha sea mayor
-        emit(Machine.JUMPIFop,Machine.falseRep,Machine.SBr,jumpAddr); //Si no es mayor, se termina el ciclo*/
         return null;
     }
 
